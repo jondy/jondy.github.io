@@ -1,1 +1,41 @@
-Hello World
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta name="description" content="A tool used to obfuscate python scripts." />
+  <meta name="Keywords" content="python, obfuscate, obfuscation, obfuscator" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Pyarmor - Obfuscating Python Scripts</title>
+</head>
+
+<body>
+
+  <a class="nav-link" href="#" onclick="openCheckout(itemsList)">Paddle</a>
+
+<script type="text/javascript" src="https://cdn.paddle.com/paddle/v2/paddle.js"></script>
+
+<script type="text/javascript">
+  Paddle.Environment.set("sandbox");
+  Paddle.Initialize({
+    token: "test_20b5a8fb63fb38c57ca3bb01cdb"
+  });
+
+  // define items
+  let itemsList = [
+    {
+      priceId: "pro_01j96fhkk7jxhe2wg0f7k9gktd",
+      quantity: 1
+    },
+  ];
+
+  // open checkout
+  function openCheckout(items){
+    Paddle.Checkout.open({
+      items: items
+    });
+  }
+</script>
+
+</body>
+</html>
