@@ -377,7 +377,7 @@
                 <div class="card-header py-3">
                   <h4 class="my-0 fw-normal">CI</h4>
                 </div>
-                <div class="card-body">
+                <div class="card-body bg-body-secondary">
                   <h1 class="card-title pricing-card-title">$169<small class="text-body-secondary fw-light"></small></h1>
                   <ul class="list-unstyled mt-3 mb-4">
                     <li>Pro features plus</li>
@@ -409,7 +409,7 @@
                       </tr>
                     </table>
                     <input type="hidden" name="currency_code" value="USD" />
-                    <input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_buynow_SM.gif" border="0" name="submit" title="PayPal - The safer, easier way to pay online!" alt="Buy Now" disabled />
+                    <input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_buynow_GR.gif" border="0" name="" title="PayPal - The safer, easier way to pay online!" alt="Buy Now" disabled />
                   </form>
 
                   <!-- <button type="button" class="w-100 btn btn-lg btn-outline-primary">Buy Now</button> -->
@@ -624,16 +624,20 @@
                   if (!regname.value) {
                       regname.focus();
                       e.preventDefault();
-                      return
+                      e.stopPropagation()
                   }
                   else if (!regemail.value) {
                       regemail.focus();
                       e.preventDefault();
-                      return
+                      e.stopPropagation();
                   }
-                  else if (e.currentTarget.attributeName("Disabled") !== null) {
-                      e.preventDefault();
-                      return
+                  else {
+                      const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+                      if (!emailPattern.test(regemail.value)) {
+                          regemail.focus();
+                          e.preventDefault();
+                          e.stopPropagation();
+                      }
                   }
               }));
       })
