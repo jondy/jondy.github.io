@@ -603,14 +603,14 @@
       window.addEventListener('DOMContentLoaded', () => {
           document.querySelector('#licenseTo').addEventListener(
               'change', (e) => {
-                  document.querySelectorAll('input[name="os1"]')
+                  document.querySelectorAll('input[name="os0"]')
                       .forEach(input => {
                           input.value = e.target.value;
                       })
               });
           document.querySelector('#shippingEmail').addEventListener(
               'change', (e) => {
-                  document.querySelectorAll('input[name="os2"]')
+                  document.querySelectorAll('input[name="os1"]')
                       .forEach(input => {
                           input.value = e.target.value;
                       })
