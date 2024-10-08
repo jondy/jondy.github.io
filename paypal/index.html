@@ -200,28 +200,6 @@
           <p class="fs-5 text-body-secondary">Free version never expires, but there are some limitations. These limitations can be unlocked by <a class="link-body-emphasis text-decoration-none" href="https://pyarmor.readthedocs.io/en/latest/licenses.html">Different License Types</a></p>
         </div>
 
-<div id="paypal-button-container-P-4SK44880H2158841RM4C3D3Y"></div>
-<script src="https://www.paypal.com/sdk/js?client-id=AZ_7QfiRhoQzUO7QAkqACgUT_7u6fW2VJJG18ihWbt_Hxr9Ps3MD51uvQz2zjEhPFcVHAYD0wauImO8r&vault=true&intent=subscription" data-sdk-integration-source="button-factory"></script>
-<script>
-  paypal.Buttons({
-      style: {
-          shape: 'rect',
-          color: 'gold',
-          layout: 'vertical',
-          label: 'subscribe'
-      },
-      createSubscription: function(data, actions) {
-        return actions.subscription.create({
-          /* Creates the subscription */
-          plan_id: 'P-4SK44880H2158841RM4C3D3Y'
-        });
-      },
-      onApprove: function(data, actions) {
-        alert(data.subscriptionID); // You can add optional success message for the subscriber here
-      }
-  }).render('#paypal-button-container-P-4SK44880H2158841RM4C3D3Y'); // Renders the PayPal button
-</script>
-
         <h2 class="display-6 text-center mb-4">
           Purchase License
         </h2>
