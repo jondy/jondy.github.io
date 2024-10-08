@@ -200,6 +200,28 @@
           <p class="fs-5 text-body-secondary">Free version never expires, but there are some limitations. These limitations can be unlocked by <a class="link-body-emphasis text-decoration-none" href="https://pyarmor.readthedocs.io/en/latest/licenses.html">Different License Types</a></p>
         </div>
 
+<div id="paypal-button-container-P-4SK44880H2158841RM4C3D3Y"></div>
+<script src="https://www.paypal.com/sdk/js?client-id=AZ_7QfiRhoQzUO7QAkqACgUT_7u6fW2VJJG18ihWbt_Hxr9Ps3MD51uvQz2zjEhPFcVHAYD0wauImO8r&vault=true&intent=subscription" data-sdk-integration-source="button-factory"></script>
+<script>
+  paypal.Buttons({
+      style: {
+          shape: 'rect',
+          color: 'gold',
+          layout: 'vertical',
+          label: 'subscribe'
+      },
+      createSubscription: function(data, actions) {
+        return actions.subscription.create({
+          /* Creates the subscription */
+          plan_id: 'P-4SK44880H2158841RM4C3D3Y'
+        });
+      },
+      onApprove: function(data, actions) {
+        alert(data.subscriptionID); // You can add optional success message for the subscriber here
+      }
+  }).render('#paypal-button-container-P-4SK44880H2158841RM4C3D3Y'); // Renders the PayPal button
+</script>
+
         <h2 class="display-6 text-center mb-4">
           Purchase License
         </h2>
@@ -375,14 +397,14 @@
                   <h4 class="my-0 fw-normal">CI</h4>
                 </div>
                 <div class="card-body bg-body-secondary">
-                  <h1 class="card-title pricing-card-title">$89<small class="text-body-secondary fw-light">/yr</small></h1>
+                  <h1 class="card-title pricing-card-title">$90<small class="text-body-secondary fw-light">/yr</small></h1>
                   <ul class="list-unstyled mt-3 mb-4">
                     <li>Pro features plus</li>
                     <li>CI/CD pipeline</li>
                   </ul>
                   <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
                     <input type="hidden" name="cmd" value="_s-xclick" />
-                    <input type="hidden" name="hosted_button_id" value="CBZKWCPKMKR6W" />
+                    <input type="hidden" name="hosted_button_id" value="UKZ5JKBQMBK6L" />
                     <table>
                       <tr>
                         <td>
@@ -406,10 +428,36 @@
                       </tr>
                     </table>
                     <input type="hidden" name="currency_code" value="USD" />
-                    <input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_buynow_SM.gif" border="0" name="" title="PayPal - The safer, easier way to pay online!" alt="Buy Now" style="cursor: not-allowed" disabled />
+                    <input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_subscribe_SM.gif" border="0" name="submit" title="PayPal - The safer, easier way to pay online!" alt="Subscribe" style="cursor: not-allowed" disabled/>
                   </form>
-
-                  <!-- <button type="button" class="w-100 btn btn-lg btn-outline-primary">Buy Now</button> -->
+                  <!-- <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top"> -->
+                  <!--   <input type="hidden" name="cmd" value="_s-xclick" /> -->
+                  <!--   <input type="hidden" name="hosted_button_id" value="CBZKWCPKMKR6W" /> -->
+                  <!--   <table> -->
+                  <!--     <tr> -->
+                  <!--       <td> -->
+                  <!--         <input type="hidden" name="on0" value="License To"/> -->
+                  <!--       </td> -->
+                  <!--     </tr> -->
+                  <!--     <tr> -->
+                  <!--       <td> -->
+                  <!--         <input type="hidden" name="os0" maxLength="200" /> -->
+                  <!--       </td> -->
+                  <!--     </tr> -->
+                  <!--     <tr> -->
+                  <!--       <td> -->
+                  <!--         <input type="hidden" name="on1" value="Shipping Email"/> -->
+                  <!--       </td> -->
+                  <!--     </tr> -->
+                  <!--     <tr> -->
+                  <!--       <td> -->
+                  <!--         <input type="hidden" name="os1" maxLength="200" /> -->
+                  <!--       </td> -->
+                  <!--     </tr> -->
+                  <!--   </table> -->
+                  <!--   <input type="hidden" name="currency_code" value="USD" /> -->
+                  <!--   <input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_buynow_SM.gif" border="0" name="" title="PayPal - The safer, easier way to pay online!" alt="Buy Now" style="cursor: not-allowed" disabled /> -->
+                  <!-- </form> -->
                 </div>
               </div>
             </div>
@@ -576,8 +624,8 @@
               <li><a class=" link-body-emphasis text-decoration-none" href="https://pyarmor.readthedocs.io/en/latest/reference/solutions.html">Checklist</a> and
                 <a class=" link-body-emphasis text-decoration-none" href="https://pyarmor.readthedocs.io/en/latest/questions.html">FAQs</a> could fix 90% issues reported to Pyarmor Team</li>
               <li><a class=" link-body-emphasis text-decoration-none" href="https://github.com/dashingsoft/pyarmor/discussions/">Discussions in Pyarmor project home</a></li>
-              <li><i>pyarmor man</i> (coming soon), help command could show each option usage by full examples</li>
-              <li>EKE Learning Platform (coming soon), learn Pyarmor concepts by animations for junior users</li>
+              <li>Full examples to show each option usage and common cases by command <i>pyarmor man</i> (coming soon)</li>
+              <li>Learn Pyarmor concepts by figure and animations in EKE Learning Platform (coming soon)</li>
             </ul>
           </p>
           <p class="fs-5 text-body-secondary">
