@@ -642,30 +642,38 @@
     <script src="./js/bootstrap.bundle.min.js"></script>
     <script>
       window.addEventListener('DOMContentLoaded', () => {
-          document.querySelector('#licenseTo').addEventListener(
-              'change', (e) => {
-                  document.querySelectorAll('input[name="os0"]')
-                      .forEach(input => {
-                          input.value = e.target.value;
-                      })
-              });
-          document.querySelector('#shippingEmail').addEventListener(
-              'change', (e) => {
-                  document.querySelectorAll('input[name="os1"]')
-                      .forEach(input => {
-                          input.value = e.target.value;
-                      })
-              });
+          // document.querySelector('#licenseTo').addEventListener(
+          //     'change', (e) => {
+          //         document.querySelectorAll('input[name="os0"]')
+          //             .forEach(input => {
+          //                 input.value = e.target.value;
+          //             })
+          //     });
+          // document.querySelector('#shippingEmail').addEventListener(
+          //     'change', (e) => {
+          //         document.querySelectorAll('input[name="os1"]')
+          //             .forEach(input => {
+          //                 input.value = e.target.value;
+          //             })
+          //     });
           document.querySelectorAll('input[name="submit"]')
               .forEach(
                   btn => btn.addEventListener(
               'click', (e) => {
                   let regname = document.querySelector('#licenseTo')
                   let regemail = document.querySelector('#shippingEmail')
+                  document.querySelectorAll('input[name="os0"]')
+                      .forEach(input => {
+                          input.value = regname.value;
+                      });
+                  document.querySelectorAll('input[name="os1"]')
+                      .forEach(input => {
+                          input.value = regemail.value;
+                      });
                   if (!regname.value) {
                       regname.focus();
                       e.preventDefault();
-                      e.stopPropagation()
+                      e.stopPropagation();
                   }
                   else if (!regemail.value) {
                       regemail.focus();
