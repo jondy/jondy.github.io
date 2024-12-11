@@ -184,7 +184,7 @@
       <main>
         <div class="py-3 pb-md-4 mx-auto">
           <h2 class="display-6 text-center mb-4">Thank you for purhasing Pyarmor License</h2>
-          <p class="fs-5 text-body-secondary">The license key will be sent to <b>Shipping Email</b> in an hour. Check slam box, email settings to make sure <b>Shipping Email</b> doesn't reject <a class="link-body-emphasis text-decoration-none text-muted" href="mailto:pyarmor@163.com">pyarmor@163.com</a>. If still not received in 24 hours, please contact <a class="link-body-emphasis text-decoration-none text-muted" href="mailto:pyarmor@163.com">pyarmor@163.com</a>
+          <p class="fs-5 text-body-secondary">The license key will be sent to <b name="regemail">Shipping Email</b> in an hour. If not received, please check spam box, and make sure <b name="regemail">Shipping Email</b> doesn't reject <a class="link-body-emphasis text-decoration-none text-muted" href="mailto:pyarmor@163.com">pyarmor@163.com</a>. If still not received in 24 hours, please contact <a class="link-body-emphasis text-decoration-none text-muted" href="mailto:pyarmor@163.com">pyarmor@163.com</a>. If no any reply, generally it's email system issue, please ask for refund in PayPal.
           </p>
           <p class="fs-5 text-body-secondary">Note that Pyarmor Team will review <b>Pyarmor Group License</b> information to make sure it's purchased by real company within 24 hours. Before that <b>Pyarmor Group License</b> are not available</p>
         </div>
@@ -235,20 +235,22 @@
     <script src="./js/bootstrap.bundle.min.js"></script>
     <script>
       window.addEventListener('DOMContentLoaded', () => {
-          document.querySelector('#licenseTo').addEventListener(
-              'change', (e) => {
-                  document.querySelectorAll('input[name="os1"]')
-                      .forEach(input => {
-                          input.value = e.target.value;
-                      })
-              });
-          document.querySelector('#shippingEmail').addEventListener(
-              'change', (e) => {
-                  document.querySelectorAll('input[name="os2"]')
-                      .forEach(input => {
-                          input.value = e.target.value;
-                      })
-              });
+        try {
+          const data = window.localStorage.getItem( 'REGINFO');
+          if (typeof data === 'string') {
+            const reginfo = JSON.parse(data);
+            if (Date.now() > reginfo.timestamp + 24*3600) {
+              window.localStorage.clear();
+            }
+            else {
+              document.querySelectorAll('b[name="regemail"]')
+                .forEach(el => el.innerHtml = reginfo.regemail);
+            }
+          }
+        }
+        catch ( err ) {
+          console.log(err.toString());
+        }
       })
     </script>
   </body>

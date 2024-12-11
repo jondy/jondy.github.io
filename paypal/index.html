@@ -228,7 +228,7 @@
           <div class="form-floating mb-3">
             <input type="text" class="form-control" id="licenseTo" placeholder="It should be person or company name which will use Pyarmor" />
             <label for="licenseTo">License To</label>
-            <p class="mb-3 text-body-secondary">Fill person or company name which will use Pyarmor</p>
+            <p class="mb-3 text-body-secondary">Fill person or company name which will use Pyarmor, <b>do not fill email here</b></p>
           </div>
           <div class="form-floating mb-3">
             <input type="email" class="form-control" id="shippingEmail" placeholder="Pyarmor team will sent license key to this email" />
@@ -689,10 +689,29 @@
                   }
                   else {
                       const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
                       if (!emailPattern.test(regemail.value)) {
                           regemail.focus();
                           e.preventDefault();
                           e.stopPropagation();
+                      }
+
+                      if (regname.value.indexOf('@') != -1) {
+                          regname.focus();
+                          e.preventDefault();
+                          e.stopPropagation();
+                      }
+
+                      try {
+                          const data = JSON.stringify({
+                              timestamp: Date.now(),
+                              regname: regname.value,
+                              regemail: regemail.value,
+                          });
+                          window.localStorage.setItem( 'REGINFO', data);
+                      }
+                      catch ( err ) {
+                          console.log(err.toString());
                       }
                   }
               }));
