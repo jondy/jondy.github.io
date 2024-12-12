@@ -363,7 +363,7 @@
                       </tr>
                     </table>
                     <input type="hidden" name="currency_code" value="USD" />
-                    <input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_buynow_SM.gif" border="0" name="submit" title="PayPal - The safer, easier way to pay online!" alt="Buy Now" />
+                    <input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_buynow_SM.gif" border="0" licgroup="true" name="submit" title="PayPal - The safer, easier way to pay online!" alt="Buy Now" />
                   </form>
                   <!-- <button type="button" class="w-100 btn btn-lg btn-outline-primary">Buy Now</button> -->
                 </div>
@@ -694,6 +694,18 @@
                           regemail.focus();
                           e.preventDefault();
                           e.stopPropagation();
+                      }
+
+                      if (btn.getAttribute("licgroup") === "true") {
+                          if (regemail.value.indexOf('@gmail.') > 0
+                              || regemail.value.indexOf('@outlook.') > 0
+                              || regemail.value.indexOf('@proton.me') > 0
+                              || regemail.value.indexOf('@protonmail.com') > 0
+                              || regemail.value.indexOf('@hotmail.') > 0) {
+                              regemail.focus();
+                              e.preventDefault();
+                              e.stopPropagation();
+                          }
                       }
 
                       if (regname.value.indexOf('@') != -1) {
