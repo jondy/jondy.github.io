@@ -678,7 +678,7 @@
                       .forEach(input => {
                           input.value = regemail.value;
                       });
-                  if (!regname.value || regname.length > 80) {
+                  if (!regname.value || regname.value.length > 80) {
                       regname.focus();
                       e.preventDefault();
                       e.stopPropagation();
