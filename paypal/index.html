@@ -668,22 +668,24 @@
               .forEach(
                   btn => btn.addEventListener(
               'click', (e) => {
-                  let regname = document.querySelector('#licenseTo')
-                  let regemail = document.querySelector('#shippingEmail')
+                  let regname = document.querySelector('#licenseTo');
+                  let regemail = document.querySelector('#shippingEmail');
+                  let strname = regname.value.trim();
+                  let stremail = regemail.value.trim();
                   document.querySelectorAll('input[name="os0"]')
                       .forEach(input => {
-                          input.value = regname.value;
+                          input.value = strname;
                       });
                   document.querySelectorAll('input[name="os1"]')
                       .forEach(input => {
-                          input.value = regemail.value;
+                          input.value = stremail;
                       });
-                  if (!regname.value || regname.value.length > 80 || regname.value.length < 6) {
+                  if (!strname || strname.length > 80 || strname.length < 6) {
                       regname.focus();
                       e.preventDefault();
                       e.stopPropagation();
                   }
-                  else if (!regemail.value) {
+                  else if (!stremail) {
                       regemail.focus();
                       e.preventDefault();
                       e.stopPropagation();
@@ -691,26 +693,26 @@
                   else {
                       const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
-                      if (!emailPattern.test(regemail.value)) {
+                      if (!emailPattern.test(stremail)) {
                           regemail.focus();
                           e.preventDefault();
                           e.stopPropagation();
                       }
 
                       if (btn.getAttribute("licgroup") === "true") {
-                          if (regemail.value.indexOf('@gmail.') > 0
-                              || regemail.value.indexOf('@outlook.') > 0
-                              || regemail.value.indexOf('@icloud.') > 0
-                              || regemail.value.indexOf('@proton.me') > 0
-                              || regemail.value.indexOf('@protonmail.com') > 0
-                              || regemail.value.indexOf('@hotmail.') > 0) {
+                          if (stremail.indexOf('@gmail.') > 0
+                              || stremail.indexOf('@outlook.') > 0
+                              || stremail.indexOf('@icloud.') > 0
+                              || stremail.indexOf('@proton.me') > 0
+                              || stremail.indexOf('@protonmail.com') > 0
+                              || stremail.indexOf('@hotmail.') > 0) {
                               regemail.focus();
                               e.preventDefault();
                               e.stopPropagation();
                           }
                       }
 
-                      if (regname.value.indexOf('@') != -1) {
+                      if (strname.indexOf('@') != -1) {
                           regname.focus();
                           e.preventDefault();
                           e.stopPropagation();
@@ -719,8 +721,8 @@
                       try {
                           const data = JSON.stringify({
                               timestamp: Date.now(),
-                              regname: regname.value,
-                              regemail: regemail.value,
+                              regname: strname,
+                              regemail: stremail,
                           });
                           window.localStorage.setItem( 'REGINFO', data);
                       }
