@@ -229,7 +229,7 @@
           <div class="form-floating mb-3">
             <input type="text" class="form-control" id="licenseTo" placeholder="It should be person or company name which will use Pyarmor" />
             <label for="licenseTo">License To</label>
-            <p class="mb-3 text-body-secondary">Fill person or company name which will use Pyarmor, <b>do not fill email here</b></p>
+            <p class="mb-3 text-body-secondary">Fill person or company name which will use Pyarmor, <b>do not fill email here</b>, no more than 80 chars</p>
           </div>
           <div class="form-floating mb-3">
             <input type="email" class="form-control" id="shippingEmail" placeholder="Pyarmor team will sent license key to this email" />
@@ -678,7 +678,7 @@
                       .forEach(input => {
                           input.value = regemail.value;
                       });
-                  if (!regname.value) {
+                  if (!regname.value || regname.length > 80) {
                       regname.focus();
                       e.preventDefault();
                       e.stopPropagation();
