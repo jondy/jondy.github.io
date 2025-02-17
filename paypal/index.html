@@ -700,13 +700,14 @@
                       }
 
                       if (btn.getAttribute("licgroup") === "true") {
-                          if (stremail.indexOf('@gmail.') > 0
-                              || stremail.indexOf('@outlook.') > 0
-                              || stremail.indexOf('@icloud.') > 0
-                              || stremail.indexOf('@yahoo.') > 0
-                              || stremail.indexOf('@proton.me') > 0
-                              || stremail.indexOf('@protonmail.com') > 0
-                              || stremail.indexOf('@hotmail.') > 0) {
+                          const pubemails = [
+                              '@qq.', '@163.', '@126.', '@139.',
+                              '@sohu.', '@sina.', '@foxmail.',
+                              '@gmail.', '@outlook.', '@hotmail.',
+                              '@icloud.', '@yahoo.',
+                              '@proton.me', '@protonmail.com',
+                          ]
+                          if (pubemails.some((x) => stremail.indexOf(x) > 0)) {
                               regemail.focus();
                               e.preventDefault();
                               e.stopPropagation();
