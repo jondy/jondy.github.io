@@ -241,7 +241,7 @@
           const data = window.localStorage.getItem( 'REGINFO');
           if (typeof data === 'string') {
             const reginfo = JSON.parse(data);
-            if (Date.now() > reginfo.timestamp + 24*3600) {
+            if (Date.now() > reginfo.timestamp + 7*24*3600) {
               window.localStorage.clear();
             }
             else {

@@ -336,7 +336,7 @@
                   <h1 class="card-title pricing-card-title">$158<small class="text-body-secondary fw-light"></small></h1>
                   <ul class="list-unstyled mt-3 mb-4">
                     <li>Pro features plus</li>
-                    <li>Unlimited dockers</li>
+                    <li>Offline building</li>
                   </ul>
                   <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
                     <input type="hidden" name="cmd" value="_s-xclick" />
@@ -733,6 +733,23 @@
                       }
                   }
               }));
+
+          try {
+              const data = window.localStorage.getItem( 'REGINFO');
+              if (typeof data === 'string') {
+                  const reginfo = JSON.parse(data);
+                  if (Date.now() > reginfo.timestamp + 7*24*3600) {
+                      window.localStorage.clear();
+                  }
+                  else {
+                      document.querySelector('#licenseTo').value = reginfo.regname
+                      document.querySelector('#shippingEmail').value = reginfo.regemail
+                  }
+              }
+          }
+          catch ( err ) {
+              console.log(err.toString());
+          }
       })
     </script>
   </body>
