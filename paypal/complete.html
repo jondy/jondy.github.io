@@ -190,6 +190,30 @@
           <p class="fs-4 text-body-secondary">If there is no reply in 24 hours, please <a class="link-body-emphasis text-decoration-none" href="https://github.com/dashingsoft/pyarmor/issues">report issue in GitHub</a></p>
           <p class="fs-5 text-body-secondary">Note that Pyarmor Team will review <b>Pyarmor Group License</b> information to make sure it's purchased by real company within 24 hours, then send an email with subject <b>Group License Avaiable Now</b> to <b name="regemail">Shipping Email</b>. Before that, this <b>Pyarmor Group License</b> is not available</p>
         </div>
+        <div class="py-3 pb-md-4 mx-auto">
+          <div id="infobox" class="alert alert-info" role="alert">
+            If need invoice, please fill the following form, then click <b>Request Invoice</b>
+          </div>
+          <form>
+            <input type="hidden" name="regemail" value="" />
+            <div class="mb-3">
+              <label for="regname" class="form-label">Business Name</label>
+              <input class="form-control" name="regname" aria-describedby="regnameHelp">
+              <div id="regnameHelp" class="form-text">No more than 100 chars</div>
+            </div>
+            <div class="mb-3">
+              <label for="regaddr" class="form-label">Full Address</label>
+              <input class="form-control" name="regaddr" aria-describedby="regaddrHelp">
+              <div id="regaddrHelp" class="form-text">No more than 200 chars, and need not include country</div>
+            </div>
+            <div class="mb-3">
+              <label for="regnote" class="form-label">Notes</label>
+              <input class="form-control" name="regnote" aria-describedby="regnoteHelp">
+              <div id="regnoteHelp" class="form-text">No more than 300 chars</div>
+            </div>
+            <button type="submit" class="btn btn-light">Request Invoice</button>
+          </form>
+        </div>
       </main>
 
       <footer class="pt-4 my-md-5 pt-md-5 border-top">
@@ -236,24 +260,119 @@
 
     <script src="./js/bootstrap.bundle.min.js"></script>
     <script>
-      window.addEventListener('DOMContentLoaded', () => {
-        try {
-          const data = window.localStorage.getItem( 'REGINFO');
-          if (typeof data === 'string') {
-            const reginfo = JSON.parse(data);
-            if (Date.now() > reginfo.timestamp + 7*24*3600) {
-              window.localStorage.clear();
-            }
-            else {
-              document.querySelectorAll('b[name="regemail"]')
-                .forEach(el => el.innerHTML = reginfo.regemail);
-            }
+      const request_invoice = (reginfo) => {
+          const url = "https://api.dashingsoft.com/product/pay/invoice/";
+          const regemail = document.querySelector('input[name="regemail"]');
+          const regname = document.querySelector('input[name="regname"]');
+          const regaddr = document.querySelector('input[name="regaddr"]');
+          const regnote = document.querySelector('input[name="regnote"]');
+          const submitbtn = document.querySelector('form button[type="submit"]');
+          const infodiv = document.getElementById('infobox');
+          const invdata = window.localStorage.getItem( 'INVINFO');
+
+          regemail.value = reginfo.regemail;
+          regname.value = reginfo.regname;
+
+          if (typeof invdata === 'string') {
+              const invinfo = JSON.parse(invdata);
+
+              regname.value = invinfo.regname;
+              regaddr.value = invinfo.regaddr;
+              regnote.value = invinfo.regnote;
+
+              regname.setAttribute('disabled', '');
+              regaddr.setAttribute('disabled', '');
+              regnote.setAttribute('disabled', '');
+
+              submitbtn.setAttribute('disabled', '');
+              infodiv.innerHTML = "You have requested invoice with the following information";
           }
-        }
-        catch ( err ) {
-          console.log(err.toString());
-        }
-      })
+          else {
+              submitbtn.addEventListener('click', (e) => {
+
+                  const req = new Request(url);
+                  const headers = new Headers();
+                  const method = 'POST';
+                  const paras = {
+                      regemail: regemail.value,
+                      regname: regname.value,
+                      regaddr: regaddr.value,
+                      regnote: regnote.value,
+                  };
+                  const formData = new FormData();
+                  formData.append("regemail", paras.regemail);
+                  formData.append("regname", paras.regname);
+                  formData.append("regaddr", paras.regaddr);
+                  formData.append("regnote", paras.regnote);
+
+                  e.preventDefault();
+                  e.stopPropagation();
+
+                  regname.setAttribute('disabled', '');
+                  regaddr.setAttribute('disabled', '');
+                  regnote.setAttribute('disabled', '');
+                  submitbtn.setAttribute('disabled', '');
+
+                  fetch(req, {
+                      method: method,
+                      mode: "cors",
+                      headers: headers,
+                      body: formData,
+                  })
+                      .then((res) => {
+                          if (res.ok)
+                              return res.json();
+                          if (res.status === 400)
+                              return res.text();
+                          throw new Error(res.statusText);
+                      })
+
+                      .then((invoice) => {
+                          if (typeof invoice === "string")
+                              throw new Error(invoice);
+                          console.log(`Get invoice: ${invoice}`);
+                          window.localStorage.setItem('INVINFO', JSON.stringify(paras));
+                          infodiv.className = "alert alert-success";
+                          infodiv.innerHTML = "Request invoice sucessfully";
+                      })
+
+                      .catch((err) => {
+                          console.log(`got error: ${err}`);
+                          infodiv.className = "alert alert-danger";
+                          infodiv.innerHTML = err.toString();
+                          regname.removeAttribute('disabled');
+                          regaddr.removeAttribute('disabled');
+                          regnote.removeAttribute('disabled');
+                          submitbtn.removeAttribute('disabled');
+                      })
+              });
+          }
+
+      };
+
+      window.addEventListener('DOMContentLoaded', () => {
+          try {
+              // request_invoice({
+              //     regemail: "operations@bemyeyes.com",
+              //     regname: "Accessibly Inc. dba Be My Eyes",
+              // });
+              const data = window.localStorage.getItem( 'REGINFO');
+              if (typeof data === 'string') {
+                  const reginfo = JSON.parse(data);
+                  if (Date.now() > reginfo.timestamp + 7*24*3600) {
+                      window.localStorage.clear();
+                  }
+                  else {
+                      document.querySelectorAll('b[name="regemail"]')
+                          .forEach(el => el.innerHTML = reginfo.regemail);
+                      request_invoice(reginfo);
+                  }
+              }
+          }
+          catch (err) {
+              console.log(err.toString());
+          }
+      });
     </script>
   </body>
 </html>
