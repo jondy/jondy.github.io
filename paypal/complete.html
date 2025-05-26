@@ -199,19 +199,22 @@
             <div class="mb-3">
               <label for="regname" class="form-label">Business Name</label>
               <input class="form-control" name="regname" aria-describedby="regnameHelp">
-              <div id="regnameHelp" class="form-text">No more than 100 chars</div>
+              <div id="regnameHelp" class="form-text">Required, no more than 100 chars</div>
             </div>
             <div class="mb-3">
               <label for="regaddr" class="form-label">Full Address</label>
               <input class="form-control" name="regaddr" aria-describedby="regaddrHelp">
-              <div id="regaddrHelp" class="form-text">No more than 200 chars, and need not include country</div>
+              <div id="regaddrHelp" class="form-text">Optional, no more than 200 chars, and need not include country</div>
             </div>
             <div class="mb-3">
               <label for="regnote" class="form-label">Extra Infos</label>
               <input class="form-control" name="regnote" aria-describedby="regnoteHelp" value="">
-              <div id="regnoteHelp" class="form-text">No more than 300 chars, extra information will be displayed in the invoice. For example, VAT No.</div>
+              <div id="regnoteHelp" class="form-text">Optional, no more than 300 chars, extra information will be displayed in the invoice. For example, VAT No.</div>
             </div>
             <button type="submit" class="btn btn-light">Request Invoice</button>
+            <div class="form-text">
+              The invoice will be sent to PayPal <b>payer email</b> in 24 hours, note that <b>shipping email</b> won't receive invoice if it's not same as payer email.
+            </div>
           </form>
         </div>
       </main>
