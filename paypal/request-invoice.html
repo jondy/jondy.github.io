@@ -178,6 +178,12 @@
               <div id="regemailHelp" class="form-text">Required, <b>it must be the email account which has received the license code</b>, no more than 200 chars</div>
             </div>
             <div class="mb-3">
+              <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" role="switch" name="billto" id="switchBillto">
+                <label class="form-check-label" for="switchBillto">Check it to show shipping email in the invoice BILL TO field (by default, it's payer email)</label>
+              </div>
+            </div>
+            <div class="mb-3">
               <label for="regname" class="form-label"><b>Business Name</b></label>
               <input class="form-control" name="regname" aria-describedby="regnameHelp">
               <div id="regnameHelp" class="form-text">Required, no more than 100 chars</div>
@@ -210,6 +216,7 @@
           const regname = document.querySelector('input[name="regname"]');
           const regaddr = document.querySelector('input[name="regaddr"]');
           const regnote = document.querySelector('input[name="regnote"]');
+          const billto = document.querySelector('input[name="billto"]');
           const infodiv = document.getElementById('infobox');
           const submitbtn = document.querySelector('form button[type="submit"]');
 
@@ -223,12 +230,14 @@
                   regname: regname.value,
                   regaddr: regaddr.value,
                   regnote: regnote.value,
+                  billto: billto.checked ? "1" : "0",
               };
               const formData = new FormData();
               formData.append("regemail", paras.regemail);
               formData.append("regname", paras.regname);
               formData.append("regaddr", paras.regaddr);
               formData.append("regnote", paras.regnote);
+              formData.append("billto", paras.billto);
 
               e.preventDefault();
               e.stopPropagation();

@@ -211,6 +211,12 @@
               <input class="form-control" name="regnote" aria-describedby="regnoteHelp" value="">
               <div id="regnoteHelp" class="form-text">Optional, no more than 300 chars, extra information will be displayed in the invoice. For example, VAT No.</div>
             </div>
+            <div class="mb-3">
+              <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" role="switch" name="billto" id="switchBillto">
+                <label class="form-check-label" for="switchBillto">Check it to show shipping email in the invoice BILL TO field (by default, it's payer email)</label>
+              </div>
+            </div>
             <button type="submit" class="btn btn-light">Request Invoice</button>
             <div class="form-text">
               The invoice will be sent to PayPal <b>payer email</b> in 24 hours, note that <b>shipping email</b> won't receive invoice if it's not same as payer email.
@@ -269,6 +275,7 @@
           const regname = document.querySelector('input[name="regname"]');
           const regaddr = document.querySelector('input[name="regaddr"]');
           const regnote = document.querySelector('input[name="regnote"]');
+          const billto = document.querySelector('input[name="billto"]');
           const submitbtn = document.querySelector('form button[type="submit"]');
           const infodiv = document.getElementById('infobox');
           const invdata = window.localStorage.getItem( 'INVINFO');
@@ -282,10 +289,12 @@
               regname.value = invinfo.regname;
               regaddr.value = invinfo.regaddr;
               regnote.value = invinfo.regnote;
+              billto.checked = invinfo.billto === "1";
 
               regname.setAttribute('disabled', '');
               regaddr.setAttribute('disabled', '');
               regnote.setAttribute('disabled', '');
+              billto.setAttribute('disabled', '');
 
               submitbtn.setAttribute('disabled', '');
               infodiv.innerHTML = "You have requested invoice with the following information";
@@ -301,12 +310,14 @@
                       regname: regname.value,
                       regaddr: regaddr.value,
                       regnote: regnote.value,
+                      billto: billto.checked ? "1" : "0",
                   };
                   const formData = new FormData();
                   formData.append("regemail", paras.regemail);
                   formData.append("regname", paras.regname);
                   formData.append("regaddr", paras.regaddr);
                   formData.append("regnote", paras.regnote);
+                  formData.append("billto", paras.billto);
 
                   e.preventDefault();
                   e.stopPropagation();
@@ -314,6 +325,7 @@
                   regname.setAttribute('disabled', '');
                   regaddr.setAttribute('disabled', '');
                   regnote.setAttribute('disabled', '');
+                  billto.setAttribute('disabled', '');
                   submitbtn.setAttribute('disabled', '');
 
                   fetch(req, {
@@ -346,6 +358,7 @@
                           regname.removeAttribute('disabled');
                           regaddr.removeAttribute('disabled');
                           regnote.removeAttribute('disabled');
+                          billto.removeAttribute('disabled');
                           submitbtn.removeAttribute('disabled');
                       })
               });
