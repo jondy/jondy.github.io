@@ -427,7 +427,7 @@
           <div class="form-floating mb-3">
             <input type="email" class="form-control" id="shippingEmail" placeholder="Pyarmor team will sent license key to this email" />
             <label for="floatingInput">Shipping Email</label>
-            <p class="mb-3 text-body-secondary">The license key is sent to this email. <b>For Group License, this email must be enterprise domain</b></p>
+            <p class="mb-3 text-body-secondary">The license key is sent to this email. <b>For Group License or CI License, this email must be enterprise domain</b></p>
           </div>
         </div>
 
@@ -561,7 +561,7 @@
                       </tr>
                     </table>
                     <input type="hidden" name="currency_code" value="USD" />
-                    <input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_buynow_SM.gif" border="0" licgroup="true" name="submit" title="PayPal - The safer, easier way to pay online!" alt="Buy Now" />
+                    <input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_buynow_SM.gif" border="0" needcompany="true" name="submit" title="PayPal - The safer, easier way to pay online!" alt="Buy Now" />
                   </form>
                   <!-- <button type="button" class="w-100 btn btn-lg btn-outline-primary">Buy Now</button> -->
                 </div>
@@ -605,7 +605,7 @@
                       </tr>
                     </table>
                     <input type="hidden" name="currency_code" value="USD" />
-                    <input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_buynow_SM.gif" border="0" name="submit" title="PayPal - The safer, easier way to pay online!" alt="Buy Now"/>
+                    <input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_buynow_SM.gif" border="0" needcompany="true" name="submit" title="PayPal - The safer, easier way to pay online!" alt="Buy Now"/>
                     <!-- <input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_subscribe_SM.gif" border="0" name="submit" title="PayPal - The safer, easier way to pay online!" alt="Subscribe" style="cursor: not-allowed" disabled/> -->
                   </form>
                   <!-- <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top"> -->
@@ -710,7 +710,7 @@
                           e.stopPropagation();
                       }
 
-                      if (btn.getAttribute("licgroup") === "true") {
+                      if (btn.getAttribute("needcompany") === "true") {
                           const pubemails = [
                               '@qq.', '@163.', '@126.', '@139.',
                               '@sohu.', '@sina.', '@foxmail.',
