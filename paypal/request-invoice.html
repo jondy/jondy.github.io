@@ -198,6 +198,11 @@
               <input class="form-control" name="regnote" aria-describedby="regnoteHelp" value="">
               <div id="regnoteHelp" class="form-text">Optional, no more than 300 chars, extra information will be displayed in the invoice. For example, VAT No.</div>
             </div>
+            <div class="mb-3">
+              <label for="amount" class="form-label">How many orders</label>
+              <input class="form-control" name="amount" aria-describedby="amountHelp" value="1">
+              <div id="amountHelp" class="form-text">Optional, only if you have more than one order to request invoice</div>
+            </div>
             <button type="submit" class="btn btn-light">Request Invoice</button>
             <div class="form-text">
               The invoice will be sent to PayPal <b>payer email</b> in 24 hours, note that <b>shipping email</b> won't receive invoice if it's not same as payer email.
@@ -217,6 +222,7 @@
           const regaddr = document.querySelector('input[name="regaddr"]');
           const regnote = document.querySelector('input[name="regnote"]');
           const billto = document.querySelector('input[name="billto"]');
+          const amount = document.querySelector('input[name="amount"]');
           const infodiv = document.getElementById('infobox');
           const submitbtn = document.querySelector('form button[type="submit"]');
 
@@ -231,6 +237,7 @@
                   regaddr: regaddr.value,
                   regnote: regnote.value,
                   billto: billto.checked ? "1" : "0",
+                  amount: amount.value,
               };
               const formData = new FormData();
               formData.append("regemail", paras.regemail);
@@ -238,6 +245,7 @@
               formData.append("regaddr", paras.regaddr);
               formData.append("regnote", paras.regnote);
               formData.append("billto", paras.billto);
+              formData.append("amount", paras.amount);
 
               e.preventDefault();
               e.stopPropagation();
