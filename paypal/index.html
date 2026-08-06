@@ -434,6 +434,11 @@
             <p class="mb-3 text-body-secondary">Fill person or company name which will use Pyarmor, <b>do not fill email here</b>, at least 6 chars and no more than 80 chars</p>
           </div>
           <div class="form-floating mb-3">
+            <input type="text" class="form-control" id="licenseProduct" placeholder="It should your proudct name which scripts will be obfuscated by Pyarmor" />
+            <label for="licenseProduct">Bind Product</label>
+            <p class="mb-3 text-body-secondary">Fill product name which will be protected by Pyarmor</p>
+          </div>
+          <div class="form-floating mb-3">
             <input type="email" class="form-control" id="shippingEmail" placeholder="Pyarmor team will sent license key to this email" />
             <label for="floatingInput">Shipping Email</label>
             <p class="mb-3 text-body-secondary">The license key is sent to this email. <b>For Group License or CI License, this email must be enterprise domain</b></p>
@@ -691,11 +696,13 @@
               'click', (e) => {
                   let regname = document.querySelector('#licenseTo');
                   let regemail = document.querySelector('#shippingEmail');
+                  let regproduct = document.querySelector('#licenseProduct');
                   let strname = regname.value.trim();
                   let stremail = regemail.value.trim();
+                  let strproduct = regproduct.value.trim();
                   document.querySelectorAll('input[name="os0"]')
                       .forEach(input => {
-                          input.value = strname;
+                          input.value = `{strname},{strproduct}`;
                       });
                   document.querySelectorAll('input[name="os1"]')
                       .forEach(input => {
@@ -703,6 +710,11 @@
                       });
                   if (!strname || strname.length > 80 || strname.length < 6) {
                       regname.focus();
+                      e.preventDefault();
+                      e.stopPropagation();
+                  }
+                  else if (!strproduct || strproduct.indexOf(',') !== -1) {
+                      regproduct.focus();
                       e.preventDefault();
                       e.stopPropagation();
                   }
@@ -748,6 +760,7 @@
                               timestamp: Date.now(),
                               regname: strname,
                               regemail: stremail,
+                              regproduct: strproduct,
                           });
                           window.localStorage.setItem( 'REGINFO', data);
                       }
@@ -767,6 +780,7 @@
                   else {
                       document.querySelector('#licenseTo').value = reginfo.regname
                       document.querySelector('#shippingEmail').value = reginfo.regemail
+                      document.querySelector('#licenseProduct').value = reginfo.regproduct
                   }
               }
           }
