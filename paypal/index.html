@@ -702,7 +702,7 @@
                   let strproduct = regproduct.value.trim();
                   document.querySelectorAll('input[name="os0"]')
                       .forEach(input => {
-                          input.value = `{strname},{strproduct}`;
+                          input.value = `${strname},${strproduct}`;
                       });
                   document.querySelectorAll('input[name="os1"]')
                       .forEach(input => {
