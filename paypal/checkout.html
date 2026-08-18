@@ -187,7 +187,7 @@
       <main>
         <div class="mb-3">
           <p class="fs-5 text-body-secondary">Please fill <b>Registration Info</b> field with registration name, shipping email and bind product</p>
-          <p class="fs-5 text-body-secondary">Each item separated by comma.
+          <p class="fs-5 text-body-secondary">One item one line
             For example
             <pre>Dashingsoft corp., jondy@dashingsoft.com, Eke Suite</pre>
           </p>
@@ -302,7 +302,7 @@
                     hostedButtonId: "QFQMA84LNCS9J",
                 }).render("#paypal-container-QFQMA84LNCS9J").then(
                     (e) => {
-                        initRegistraInfo('#paypal-container-QFQMA84LNCS9J')
+                        initRegistraInfo('#paypal-container-QFQMA84LNCS9J', true)
                     });
               </script>
             </div>
@@ -317,7 +317,7 @@
                     hostedButtonId: "HX3HFR9EEBKZL",
                 }).render("#paypal-container-HX3HFR9EEBKZL").then(
                     (e) => {
-                        initRegistraInfo('#paypal-container-HX3HFR9EEBKZL')
+                        initRegistraInfo('#paypal-container-HX3HFR9EEBKZL', true)
                     });
               </script>
             </div>
@@ -354,12 +354,35 @@
 
     <script src="./js/bootstrap.bundle.min.js"></script>
     <script>
-      let regvalue = '';
+      let regname = '';
+      let regemail = '';
+      let regproduct = '';
 
-      function initRegistraInfo(btnid) {
+      function checkPublicEmail(email) {
+          const pubemails = [
+              '@qq.', '@163.', '@126.', '@139.',
+              '@sohu.', '@sina.', '@foxmail.',
+              '@gmail.', '@outlook.', '@hotmail.',
+              '@icloud.', '@me.', '@mac.',
+              '@naver.', '@yahoo.', '@google.',
+              '@mail.ru', '@duck.com',
+              '@proton.me', '@protonmail.com',
+          ]
+          return pubemails.some((x) => email.indexOf(x) > 0);
+      }
+
+      function initRegistraInfo(btnid, nopub) {
           const memo = document.querySelector(`${btnid} #memo`)
-          memo.value = regvalue
-          memo.setAttribute('disabled', 'true')
+          memo.setAttribute('disabled', 'true');
+          if (regname && regemail && regproduct) {
+              memo.value = `${regname}\n${regemail}\n${regproduct}`;
+              if (nopub && checkPublicEmail(regemail)) {
+                  // check regemail
+                  const errmemo = document.querySelector(`${btnid} #memo-err`)
+                  errmemo.innerText = `invalid "${regemail}", only private email works`;
+                  errmemo.classList.add('visible')
+              }
+          }
       }
 
       window.addEventListener('DOMContentLoaded', () => {
@@ -367,9 +390,10 @@
               const data = window.localStorage.getItem( 'REGINFO');
               if (typeof data === 'string') {
                   const reginfo = JSON.parse(data);
-                  regvalue = `${reginfo.regname}, ${reginfo.regemail}, ${reginfo.regproduct}`
+                  regname = reginfo.regname;
+                  regemail = reginfo.regemail;
+                  regproduct = reginfo.regproduct;
               }
-              console.log(`regvalue is ${regvalue}, data is ${data}`)
           } catch ( err ) {
               console.log(err.toString());
           }

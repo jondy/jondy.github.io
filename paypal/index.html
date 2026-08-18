@@ -708,7 +708,7 @@
           //                 input.value = e.target.value;
           //             })
           //     });
-          function checkCartInputs(btn, e) {
+          function checkCartInputs(e, btn) {
               let regname = document.querySelector('#licenseTo');
               let regemail = document.querySelector('#shippingEmail');
               let regproduct = document.querySelector('#licenseProduct');
@@ -747,7 +747,7 @@
                       e.stopPropagation();
                   }
 
-                  if (btn.getAttribute("needcompany") === "true") {
+                  if (btn && btn.getAttribute("needcompany") === "true") {
                       const pubemails = [
                           '@qq.', '@163.', '@126.', '@139.',
                           '@sohu.', '@sina.', '@foxmail.',
@@ -764,7 +764,7 @@
                       }
                   }
 
-                  if (strname.indexOf('@') != -1) {
+                  if (strname.indexOf('@') !== -1 || strname.indexOf(',') !== -1) {
                       regname.focus();
                       e.preventDefault();
                       e.stopPropagation();
@@ -789,14 +789,13 @@
               .forEach(
                   btn => btn.addEventListener(
                       'click', (e) => {
-                          return checkCartInputs(btn, e)
+                          return checkCartInputs(e, btn)
                       }
                   ));
 
           document.querySelector('#btnCheckout').addEventListener(
               'click', (e) => {
-                  const btn = document.querySelector('#btnCheckout')
-                  return checkCartInputs(btn, e)
+                  return checkCartInputs(e)
               })
 
           try {
