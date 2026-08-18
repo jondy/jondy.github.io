@@ -186,7 +186,7 @@
 
       <main>
         <div class="mb-3">
-          <p class="fs-5 text-body-secondary">Please fill <b>Registration Info</b> field with registration name, bind product, and shipping email</p>
+          <p class="fs-5 text-body-secondary">Please fill <b>Registration Info</b> field with registration name, bind product, shipping email</p>
           <p class="fs-5 text-body-secondary">One item one line.
             For example
             <pre>
@@ -195,8 +195,8 @@ Eke Studio
 jondy@dashingsoft.com</pre>
           </p>
           <p class="fs-5 text-body-secondary"><b>Note:</b></p>
-          <p class="fs-5 text-body-secondary">If <b>Registration Info</b> is in wrong format, the activation email won't be sent automatically</p>
           <p class="fs-5 text-body-secondary">Back to order page to update registration info</p>
+          <p class="fs-5 text-body-secondary">If <b>Registration Info</b> is in wrong format, the activation email won't be sent automatically</p>
         </div>
 
         <div class="mb-3">
@@ -383,8 +383,9 @@ jondy@dashingsoft.com</pre>
               if (nopub && checkPublicEmail(regemail)) {
                   // check regemail
                   const errmemo = document.querySelector(`${btnid} #memo-err`)
-                  errmemo.innerText = `invalid "${regemail}", only private email works`;
+                  errmemo.innerText = `invalid "${regemail}", only enterprise email works`;
                   errmemo.classList.add('visible')
+                  memo.value = ''
               }
           }
       }
