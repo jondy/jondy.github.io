@@ -708,7 +708,7 @@
           //                 input.value = e.target.value;
           //             })
           //     });
-          function checkCartInputs(e) {
+          function checkCartInputs(btn, e) {
               let regname = document.querySelector('#licenseTo');
               let regemail = document.querySelector('#shippingEmail');
               let regproduct = document.querySelector('#licenseProduct');
@@ -789,13 +789,14 @@
               .forEach(
                   btn => btn.addEventListener(
                       'click', (e) => {
-                          return checkCartInputs(e)
+                          return checkCartInputs(btn, e)
                       }
                   ));
 
           document.querySelector('#btnCheckout').addEventListener(
               'click', (e) => {
-                  return checkCartInputs(e)
+                  const btn = document.querySelector('#btnCheckout')
+                  return checkCartInputs(btn, e)
               })
 
           try {
