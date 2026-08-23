@@ -396,13 +396,33 @@ jondy@dashingsoft.com</pre>
           const product = reginfo[1];
           const email = reginfo[2];
 
-          if (name.length > 60) {
-              showError(`"${name}" should be less than 60`);
+          if (name.length < 6) {
+              showError(`Name "${name}" need at least 6 chars`);
+              return false;
+          }
+
+          if (name.length > 80) {
+              showError(`Name "${name}" should be less than 80 chars`);
+              return false;
+          }
+
+          if (name.indexOf('@') !== -1) {
+              showError(`Name "${name}" include invalid char "@"`);
+              return false;
+          }
+
+          if (product.length < 6) {
+              showError(`"Product "${product}" need at least 6 chars`);
               return false;
           }
 
           if (product.length > 60) {
-              showError(`Product "${product}" should be less than 60`);
+              showError(`Product "${product}" should be less than 60 chars`);
+              return false;
+          }
+
+          if (product.indexOf(',') !== -1) {
+              showError(`Product "${product}" include invalid char ","`);
               return false;
           }
 
@@ -413,7 +433,7 @@ jondy@dashingsoft.com</pre>
           }
 
           if ((lictype == 'ci' || lictype == 'group') && checkPublicEmail(email)) {
-              showError(`Invalid "${email}", only enterprise email works`);
+              showError(`Invalid "${email}", only enterprise email works for ${lictype.toUpperCase()} License`);
               return false;
           }
 

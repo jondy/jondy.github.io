@@ -449,6 +449,7 @@
             <input type="text" class="form-control" id="licenseProduct" placeholder="It should your proudct name which scripts will be obfuscated by Pyarmor" />
             <label for="licenseProduct">Bind Product</label>
             <p class="mb-3 text-body-secondary">Fill product name which will be protected by Pyarmor. Don't know what it means? please check <a class="link-body-no-emphasis text-decoration-none" href="https://pyarmor.readthedocs.io/en/latest/licenses.html">Pyarmor License Policy</a></p>
+            <p class="mb-3 text-body-secondary">At least 6 chars no more than 60 chars<p>
           </div>
           <div class="form-floating mb-3">
             <input type="email" class="form-control" id="shippingEmail" placeholder="Pyarmor team will sent license key to this email" />
@@ -723,12 +724,16 @@
                   .forEach(input => {
                       input.value = stremail;
                   });
-              if (!strname || strname.length > 80 || strname.length < 6) {
+              if (!strname ||
+                  strname.length > 80 || strname.length < 6
+                  strname.indexOf('@') !== -1) {
                   regname.focus();
                   e.preventDefault();
                   e.stopPropagation();
               }
-              else if (!strproduct || strproduct.indexOf(',') !== -1) {
+              else if (!strproduct ||
+                       strproduct.length > 60 || strproduct.length < 6 ||
+                       strproduct.indexOf(',') !== -1) {
                   regproduct.focus();
                   e.preventDefault();
                   e.stopPropagation();
