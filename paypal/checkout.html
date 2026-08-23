@@ -186,7 +186,7 @@
 
       <main>
         <div class="mb-3">
-          <p class="fs-5 text-body-secondary">Please fill <b>Registration Info</b> field with registration name, bind product, shipping email</p>
+          <p class="fs-5 text-body-secondary">Please fill <b>Registration Info</b> field with <b>License To</b>, <b>Bind Product</b>, <b>Shipping Email</b></P>
           <p class="fs-5 text-body-secondary">One item one line.
             For example
             <pre>
@@ -362,25 +362,13 @@ jondy@dashingsoft.com</pre>
     </div>
 
     <script src="./js/bootstrap.bundle.min.js"></script>
+    <script src="./js/checker.js"></script>
     <script>
       let regname = '';
       let regemail = '';
       let regproduct = '';
 
-      function checkPublicEmail(email) {
-          const pubemails = [
-              '@qq.', '@163.', '@126.', '@139.',
-              '@sohu.', '@sina.', '@foxmail.',
-              '@gmail.', '@outlook.', '@hotmail.',
-              '@icloud.', '@me.', '@mac.',
-              '@naver.', '@yahoo.', '@google.',
-              '@mail.ru', '@duck.com',
-              '@proton.me', '@protonmail.com',
-          ]
-          return pubemails.some((x) => email.indexOf(x) > 0);
-      }
-
-      function checkRegInfo(memo, errmemo, lictype) {
+      function verifyMemoValue(memo, errmemo, lictype) {
           const showError = (msg) => {
               errmemo.innerText = msg;
               errmemo.classList.add('visible');
@@ -392,52 +380,13 @@ jondy@dashingsoft.com</pre>
               return false;
           }
 
-          const name = reginfo[0];
-          const product = reginfo[1];
-          const email = reginfo[2];
-
-          if (name.length < 6) {
-              showError(`Name "${name}" need at least 6 chars`);
-              return false;
-          }
-
-          if (name.length > 80) {
-              showError(`Name "${name}" should be less than 80 chars`);
-              return false;
-          }
-
-          if (name.indexOf('@') !== -1) {
-              showError(`Name "${name}" include invalid char "@"`);
-              return false;
-          }
-
-          if (product.length < 6) {
-              showError(`"Product "${product}" need at least 6 chars`);
-              return false;
-          }
-
-          if (product.length > 60) {
-              showError(`Product "${product}" should be less than 60 chars`);
-              return false;
-          }
-
-          if (product.indexOf(',') !== -1) {
-              showError(`Product "${product}" include invalid char ","`);
-              return false;
-          }
-
-          const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-          if (!emailPattern.test(email)) {
-              showError(`Invalid email "${email}"`);
-              return false;
-          }
-
-          if ((lictype == 'ci' || lictype == 'group') && checkPublicEmail(email)) {
-              showError(`Invalid "${email}", only enterprise email works for ${lictype.toUpperCase()} License`);
-              return false;
-          }
-
-          return true;
+          const paras = {
+              lictype: lictype,
+              regname: regname,
+              regproduct: regproduct,
+              regemail: regemail,
+          };
+          return checkRegistrationInfo(paras, showError);
       }
 
       function enablePayment(lictype) {
@@ -451,7 +400,7 @@ jondy@dashingsoft.com</pre>
           if ( memo && errmemo ) {
               memo.setAttribute('disabled', 'true');
               memo.value = `${regname}\n${regproduct}\n${regemail}`;
-              if (checkRegInfo(memo, errmemo, lictype)) {
+              if (verifyMemoValue(memo, errmemo, lictype)) {
                   enablePayment(lictype);
               }
           }
@@ -464,16 +413,11 @@ jondy@dashingsoft.com</pre>
       }
 
       window.addEventListener('DOMContentLoaded', () => {
-          try {
-              const data = window.localStorage.getItem( 'REGINFO');
-              if (typeof data === 'string') {
-                  const reginfo = JSON.parse(data);
-                  regname = reginfo.regname;
-                  regemail = reginfo.regemail;
-                  regproduct = reginfo.regproduct;
-              }
-          } catch ( err ) {
-              console.log(err.toString());
+          const reginfo = loadRegInfo();
+          if (reginfo) {
+              regname = reginfo.regname;
+              regemail = reginfo.regemail;
+              regproduct = reginfo.regproduct;
           }
       })
     </script>

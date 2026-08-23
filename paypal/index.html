@@ -458,6 +458,12 @@
           </div>
         </div>
 
+        <div class="mb-3">
+          <span id="errorInfo" class="text-danger invisible">
+            Please select a valid state.
+          </span>
+        </div>
+
         <div class="row row-cols-1 row-cols-md-4 mb-3 text-center">
             <div class="col">
               <div class="card mb-4 rounded-3 shadow-sm">
@@ -498,7 +504,7 @@
                       </tr>
                     </table>
                     <input type="hidden" name="currency_code" value="USD" />
-                    <input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_buynow_SM.gif" border="0" name="submit" title="PayPal - The safer, easier way to pay online!" alt="Buy Now" />
+                    <input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_buynow_SM.gif" border="0" lictype="Basic" name="submit" title="PayPal - The safer, easier way to pay online!" alt="Buy Now" />
                   </form>
 
                   <!-- <button type="button" class="w-100 btn btn-lg btn-outline-primary">Buy Now</button> -->
@@ -543,7 +549,7 @@
                       </tr>
                     </table>
                     <input type="hidden" name="currency_code" value="USD" />
-                    <input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_buynow_SM.gif" border="0" name="submit" title="PayPal - The safer, easier way to pay online!" alt="Buy Now" />
+                    <input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_buynow_SM.gif" border="0" lictype="Pro" name="submit" title="PayPal - The safer, easier way to pay online!" alt="Buy Now" />
                   </form>
 
                   <!-- <button type="button" class="w-100 btn btn-lg btn-outline-primary">Buy Now</button> -->
@@ -588,7 +594,7 @@
                       </tr>
                     </table>
                     <input type="hidden" name="currency_code" value="USD" />
-                    <input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_buynow_SM.gif" border="0" needcompany="true" name="submit" title="PayPal - The safer, easier way to pay online!" alt="Buy Now" />
+                    <input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_buynow_SM.gif" border="0" lictype="Group" name="submit" title="PayPal - The safer, easier way to pay online!" alt="Buy Now" />
                   </form>
                   <!-- <button type="button" class="w-100 btn btn-lg btn-outline-primary">Buy Now</button> -->
                 </div>
@@ -632,7 +638,7 @@
                       </tr>
                     </table>
                     <input type="hidden" name="currency_code" value="USD" />
-                    <input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_buynow_SM.gif" border="0" needcompany="true" name="submit" title="PayPal - The safer, easier way to pay online!" alt="Buy Now"/>
+                    <input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_buynow_SM.gif" border="0" lictype="CI" name="submit" title="PayPal - The safer, easier way to pay online!" alt="Buy Now"/>
                     <!-- <input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_subscribe_SM.gif" border="0" name="submit" title="PayPal - The safer, easier way to pay online!" alt="Subscribe" style="cursor: not-allowed" disabled/> -->
                   </form>
                   <!-- <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top"> -->
@@ -693,134 +699,98 @@
     </div>
 
     <script src="./js/bootstrap.bundle.min.js"></script>
+    <script src="./js/checker.js"></script>
     <script>
       window.addEventListener('DOMContentLoaded', () => {
-          // document.querySelector('#licenseTo').addEventListener(
-          //     'change', (e) => {
-          //         document.querySelectorAll('input[name="os0"]')
-          //             .forEach(input => {
-          //                 input.value = e.target.value;
-          //             })
-          //     });
-          // document.querySelector('#shippingEmail').addEventListener(
-          //     'change', (e) => {
-          //         document.querySelectorAll('input[name="os1"]')
-          //             .forEach(input => {
-          //                 input.value = e.target.value;
-          //             })
-          //     });
-          function checkCartInputs(e, btn) {
-              let regname = document.querySelector('#licenseTo');
-              let regemail = document.querySelector('#shippingEmail');
-              let regproduct = document.querySelector('#licenseProduct');
-              let strname = regname.value.trim();
-              let stremail = regemail.value.trim();
-              let strproduct = regproduct.value.trim();
+          const namebox = document.querySelector('#licenseTo');
+          const emailbox = document.querySelector('#shippingEmail');
+          const productbox = document.querySelector('#licenseProduct');
+          const errbox = document.querySelector('#errorInfo');
+
+          const clearError = (e) => {
+              errbox.classList.add('invisible');
+              errbox.classList.remove('visible');
+          };
+
+          const showError = (msg) => {
+              errbox.innerText = msg;
+              errbox.classList.add('visible');
+              errbox.classList.remove('invisible');
+          };
+
+          const updatePaymentData = () => {
               document.querySelectorAll('input[name="os0"]')
                   .forEach(input => {
-                      input.value = `${strname},${strproduct}`;
+                      const regname = namebox.value.trim();
+                      const regproduct = productbox.value.trim();
+                      input.value = `${regname},${regproduct}`;
                   });
               document.querySelectorAll('input[name="os1"]')
                   .forEach(input => {
-                      input.value = stremail;
+                      input.value = emailbox.value.trim();
                   });
-              if (!strname ||
-                  strname.length > 80 || strname.length < 6 ||
-                  strname.indexOf('@') !== -1) {
-                  regname.focus();
-                  e.preventDefault();
-                  e.stopPropagation();
-              }
-              else if (!strproduct ||
-                       strproduct.length > 60 || strproduct.length < 6 ||
-                       strproduct.indexOf(',') !== -1) {
-                  regproduct.focus();
-                  e.preventDefault();
-                  e.stopPropagation();
-              }
-              else if (!stremail) {
-                  regemail.focus();
-                  e.preventDefault();
-                  e.stopPropagation();
-              }
-              else {
-                  const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+          }
 
-                  if (!emailPattern.test(stremail)) {
-                      regemail.focus();
-                      e.preventDefault();
-                      e.stopPropagation();
-                  }
+          const verifyFormData = (lictype) => {
+              const paras = {
+                  lictype: lictype,
+              };
 
-                  if (btn && btn.getAttribute("needcompany") === "true") {
-                      const pubemails = [
-                          '@qq.', '@163.', '@126.', '@139.',
-                          '@sohu.', '@sina.', '@foxmail.',
-                          '@gmail.', '@outlook.', '@hotmail.',
-                          '@icloud.', '@me.', '@mac.',
-                          '@naver.', '@yahoo.', '@google.',
-                          '@mail.ru', '@duck.com',
-                          '@proton.me', '@protonmail.com',
-                      ]
-                      if (pubemails.some((x) => stremail.indexOf(x) > 0)) {
-                          regemail.focus();
+              paras.regname = namebox.value.trim();
+              if (!checkRegistrationInfo(paras, showError)) {
+                  namebox.focus();
+                  return false;
+              }
+
+              paras.regproduct = productbox.value.trim();
+              if (!checkRegistrationInfo(paras, showError)) {
+                  productbox.focus();
+                  return false;
+              }
+
+              paras.regemail = emailbox.value.trim();
+              if (!checkRegistrationInfo(paras, showError)) {
+                  emailbox.focus();
+                  return false;
+              }
+
+              return storeRegInfo(paras);
+          };
+
+          namebox.addEventListener('blur', clearError);
+          emailbox.addEventListener('blur', clearError);
+          productbox.addEventListener('blur', clearError);
+
+          document.querySelectorAll('input[name="submit"]').forEach(
+              btn => btn.addEventListener(
+                  'click', (e) => {
+                      clearError();
+                      if (!verifyFormData(btn.getAttribute('lictype'))) {
                           e.preventDefault();
                           e.stopPropagation();
                       }
-                  }
-
-                  if (strname.indexOf('@') !== -1 || strname.indexOf(',') !== -1) {
-                      regname.focus();
-                      e.preventDefault();
-                      e.stopPropagation();
-                  }
-
-                  try {
-                      const data = JSON.stringify({
-                          timestamp: Date.now(),
-                          regname: strname,
-                          regemail: stremail,
-                          regproduct: strproduct,
-                      });
-                      window.localStorage.setItem( 'REGINFO', data);
-                  }
-                  catch ( err ) {
-                      console.log(err.toString());
-                  }
-              }
-          }
-
-          document.querySelectorAll('input[name="submit"]')
-              .forEach(
-                  btn => btn.addEventListener(
-                      'click', (e) => {
-                          checkCartInputs(e, btn)
+                      else {
+                          updatePaymentData();
                       }
-                  ));
+                  }));
 
           document.querySelector('#btnCheckout').addEventListener(
               'click', (e) => {
-                  checkCartInputs(e)
-              })
+                  clearError();
+                  if (!verifyFormData()) {
+                      e.preventDefault();
+                      e.stopPropagation();
+                  }
+              });
 
-          try {
-              const data = window.localStorage.getItem( 'REGINFO');
-              if (typeof data === 'string') {
-                  const reginfo = JSON.parse(data);
-                  if (Date.now() > reginfo.timestamp + 7*24*3600) {
-                      window.localStorage.clear();
-                  }
-                  else {
-                      document.querySelector('#licenseTo').value = reginfo.regname
-                      document.querySelector('#shippingEmail').value = reginfo.regemail
-                      document.querySelector('#licenseProduct').value = reginfo.regproduct
-                  }
-              }
+          // Load registration info
+          const reginfo = loadRegInfo();
+          if (reginfo) {
+              namebox.value = reginfo.regname;
+              emailbox.value = reginfo.regemail;
+              productbox.value = reginfo.regproduct;
           }
-          catch ( err ) {
-              console.log(err.toString());
-          }
-      })
+      });
     </script>
   </body>
 </html>
