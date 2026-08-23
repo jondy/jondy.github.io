@@ -196,7 +196,7 @@ jondy@dashingsoft.com</pre>
           </p>
           <p class="fs-5 text-body-secondary"><b>Note:</b></p>
           <p class="fs-5 text-body-secondary">Back to order page to update registration info</p>
-          <p class="fs-5 text-body-secondary">If <b>Registration Info</b> is in wrong format, the activation email won't be sent automatically</p>
+          <p class="fs-5 text-body-secondary">If <b>Registration Info</b> is in wrong format, the activation email <b>WON'T BE SENT</b> automatically</p>
         </div>
 
         <div class="mb-3">
@@ -268,21 +268,23 @@ jondy@dashingsoft.com</pre>
             <div class="tab-pane py-2 px-3 active"
                  id="basic-license-panel"
                  role="tabpanel"
+                 style="pointer-events: none"
                  aria-labelledby="basic-license-tab"
                  tabindex="0">
               <div id="paypal-container-L33GCPHMKKXNU"></div>
               <script>
-                paypal.HostedButtons({
+                 paypal.HostedButtons({
                     hostedButtonId: "L33GCPHMKKXNU",
                 }).render("#paypal-container-L33GCPHMKKXNU").then(
                     (e) => {
-                        initRegistraInfo('#paypal-container-L33GCPHMKKXNU')
+                        initRegInfo('#paypal-container-L33GCPHMKKXNU', 'basic')
                     });
               </script>
             </div>
             <div class="tab-pane py-2 px-3"
                  id="pro-license-panel"
                  role="tabpanel"
+                 style="pointer-events: none"
                  aria-labelledby="pro-license-tab"
                  tabindex="0">
               <div id="paypal-container-5A4P7GXFKQ9PN"></div>
@@ -291,13 +293,14 @@ jondy@dashingsoft.com</pre>
                     hostedButtonId: "5A4P7GXFKQ9PN",
                 }).render("#paypal-container-5A4P7GXFKQ9PN").then(
                     (e) => {
-                        initRegistraInfo('#paypal-container-5A4P7GXFKQ9PN')
+                        initRegInfo('#paypal-container-5A4P7GXFKQ9PN', 'pro')
                     });
               </script>
             </div>
             <div class="tab-pane py-2 px-3"
                  id="group-license-panel"
                  role="tabpanel"
+                 style="pointer-events: none"
                  aria-labelledby="group-license-tab"
                  tabindex="0">
               <div id="paypal-container-QFQMA84LNCS9J"></div>
@@ -306,13 +309,14 @@ jondy@dashingsoft.com</pre>
                     hostedButtonId: "QFQMA84LNCS9J",
                 }).render("#paypal-container-QFQMA84LNCS9J").then(
                     (e) => {
-                        initRegistraInfo('#paypal-container-QFQMA84LNCS9J', true)
+                        initRegInfo('#paypal-container-QFQMA84LNCS9J', 'group')
                     });
               </script>
             </div>
             <div class="tab-pane py-2 px-3"
                  id="ci-license-panel"
                  role="tabpanel"
+                 style="pointer-events: none"
                  aria-labelledby="ci-license-tab"
                  tabindex="0">
               <div id="paypal-container-HX3HFR9EEBKZL"></div>
@@ -321,13 +325,14 @@ jondy@dashingsoft.com</pre>
                     hostedButtonId: "HX3HFR9EEBKZL",
                 }).render("#paypal-container-HX3HFR9EEBKZL").then(
                     (e) => {
-                        initRegistraInfo('#paypal-container-HX3HFR9EEBKZL', true)
+                        initRegInfo('#paypal-container-HX3HFR9EEBKZL', 'ci')
                     });
               </script>
             </div>
             <div class="tab-pane py-2 px-3"
                  id="old-license-panel"
                  role="tabpanel"
+                 style="pointer-events: none"
                  aria-labelledby="old-license-tab"
                  tabindex="0">
               <div id="paypal-container-BUSZ3VH3F24C8"></div>
@@ -336,7 +341,7 @@ jondy@dashingsoft.com</pre>
                     hostedButtonId: "BUSZ3VH3F24C8",
                 }).render("#paypal-container-BUSZ3VH3F24C8").then(
                     (e) => {
-                        initRegistraInfo('#paypal-container-BUSZ3VH3F24C8')
+                        initRegInfo('#paypal-container-BUSZ3VH3F24C8', 'old')
                     });
               </script>
             </div>
@@ -375,18 +380,66 @@ jondy@dashingsoft.com</pre>
           return pubemails.some((x) => email.indexOf(x) > 0);
       }
 
-      function initRegistraInfo(btnid, nopub) {
+      function checkRegInfo(memo, errmemo, lictype) {
+          const showError = (msg) => {
+              errmemo.innerText = msg;
+              errmemo.classList.add('visible');
+          };
+
+          const reginfo = memo.value.split('\n');
+          if (reginfo.length !== 3) {
+              showError(`Registration Info is not 3 lines`);
+              return false;
+          }
+
+          const name = reginfo[0];
+          const product = reginfo[1];
+          const email = reginfo[2];
+
+          if (name.length > 60) {
+              showError(`"${name}" should be less than 60`);
+              return false;
+          }
+
+          if (product.length > 60) {
+              showError(`Product "${product}" should be less than 60`);
+              return false;
+          }
+
+          const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+          if (!emailPattern.test(email)) {
+              showError(`Invalid email "${email}"`);
+              return false;
+          }
+
+          if ((lictype == 'ci' || lictype == 'group') && checkPublicEmail(email)) {
+              showError(`Invalid "${email}", only enterprise email works`);
+              return false;
+          }
+
+          return true;
+      }
+
+      function enablePayment(lictype) {
+          document.querySelector(`#${lictype}-license-panel`).style.pointerEvents = 'auto';
+      }
+
+      function initRegInfo(btnid, lictype) {
           const memo = document.querySelector(`${btnid} #memo`)
-          memo.setAttribute('disabled', 'true');
-          if (regname && regemail && regproduct) {
+          const errmemo = document.querySelector(`${btnid} #memo-err`)
+
+          if ( memo && errmemo ) {
+              memo.setAttribute('disabled', 'true');
               memo.value = `${regname}\n${regproduct}\n${regemail}`;
-              if (nopub && checkPublicEmail(regemail)) {
-                  // check regemail
-                  const errmemo = document.querySelector(`${btnid} #memo-err`)
-                  errmemo.innerText = `invalid "${regemail}", only enterprise email works`;
-                  errmemo.classList.add('visible')
-                  memo.value = ''
+              if (checkRegInfo(memo, errmemo, lictype)) {
+                  enablePayment(lictype);
               }
+          }
+
+          else {
+              window.setTimeout(() => {
+                  initRegInfo(btnid, lictype);
+              }, 1000);
           }
       }
 
