@@ -368,25 +368,25 @@ jondy@dashingsoft.com</pre>
       let regemail = '';
       let regproduct = '';
 
-      function verifyMemoValue(memo, errmemo, lictype) {
+      function verifyFormData(lictype, memo, errmemo) {
           const showError = (msg) => {
               errmemo.innerText = msg;
               errmemo.classList.add('visible');
           };
 
-          const reginfo = memo.value.split('\n');
-          if (reginfo.length !== 3) {
+          const lines = memo.value.split('\n');
+          if (lines.length !== 3) {
               showError(`Registration Info is not 3 lines`);
               return false;
           }
 
-          const paras = {
+          const reginfo = {
               lictype: lictype,
-              regname: regname,
-              regproduct: regproduct,
-              regemail: regemail,
+              regname: lines[0],
+              regproduct: lines[1],
+              regemail: lines[2],
           };
-          return checkRegistrationInfo(paras, showError);
+          return checkRegistrationInfo(reginfo, showError);
       }
 
       function enablePayment(lictype) {
@@ -400,7 +400,7 @@ jondy@dashingsoft.com</pre>
           if ( memo && errmemo ) {
               memo.setAttribute('disabled', 'true');
               memo.value = `${regname}\n${regproduct}\n${regemail}`;
-              if (verifyMemoValue(memo, errmemo, lictype)) {
+              if (verifyFormData(lictype, memo, errmemo)) {
                   enablePayment(lictype);
               }
           }
