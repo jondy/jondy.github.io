@@ -725,7 +725,7 @@
                       input.value = stremail;
                   });
               if (!strname ||
-                  strname.length > 80 || strname.length < 6
+                  strname.length > 80 || strname.length < 6 ||
                   strname.indexOf('@') !== -1) {
                   regname.focus();
                   e.preventDefault();
@@ -794,13 +794,13 @@
               .forEach(
                   btn => btn.addEventListener(
                       'click', (e) => {
-                          return checkCartInputs(e, btn)
+                          checkCartInputs(e, btn)
                       }
                   ));
 
           document.querySelector('#btnCheckout').addEventListener(
               'click', (e) => {
-                  return checkCartInputs(e)
+                  checkCartInputs(e)
               })
 
           try {
