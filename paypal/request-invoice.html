@@ -165,11 +165,12 @@
     </svg>
 
     <div class="container py-3">
-
       <main>
         <div class="py-3 pb-md-4 mx-auto">
-          <div id="infobox" class="alert alert-info" role="alert">
-            Please fill the following form, then click <b>Request Invoice</b>.
+          <h3>Request PDF Invoice</h3>
+          <div class="alert alert-info" role="alert">
+            Please fill this form, then click <b>Submit</b> to request invoice.
+            Click here to check <a class="link-body-no-emphasis text-decoration-none" href="https://jondy.github.io/paypal/assets/invoice.pdf">sample invoice</a>
           </div>
           <form>
             <div class="mb-3">
@@ -203,11 +204,54 @@
               <input class="form-control" name="amount" aria-describedby="amountHelp" value="1">
               <div id="amountHelp" class="form-text">Optional, only if you have more than one order to request invoice</div>
             </div>
-            <button type="submit" class="btn btn-light">Request Invoice</button>
+            <div class="mb-3">
+              <span id="errbox" class="text-danger invisible"></span>
+            </div>
+            <button class="btn btn-lg btn-primary">Submit</button>
             <div class="form-text">
               The invoice will be sent to PayPal <b>payer email</b> in 24 hours, note that <b>shipping email</b> won't receive invoice if it's not same as payer email.
             </div>
           </form>
+          <hr></hr>
+          <div id="section-invoices" class="my-3">
+            <h3 class="my-3">Request History</h3>
+            <div class="mb-3 bg-secondary-subtle p-3 invcard invisible">
+              <pre>Invoice Info</pre>
+              <a class="btn btn-sm btn-secondary" href="#" role="button">
+                Download
+              </a>
+            </div>
+            <div class="mb-3 bg-secondary-subtle p-3 invcard invisible">
+              <pre>Invoice Info</pre>
+              <a class="btn btn-sm btn-secondary" href="#" role="button">
+                Download
+              </a>
+            </div>
+            <div class="mb-3 bg-secondary-subtle p-3 invcard invisible">
+              <pre>Invoice Info</pre>
+              <a class="btn btn-sm btn-secondary" href="#" role="button">
+                Download
+              </a>
+            </div>
+            <div class="mb-3 bg-secondary-subtle p-3 invcard invisible">
+              <pre>Invoice Info</pre>
+              <a class="btn btn-sm btn-secondary" href="#" role="button">
+                Download
+              </a>
+            </div>
+            <div class="mb-3 bg-secondary-subtle p-3 invcard invisible">
+              <pre>Invoice Info</pre>
+              <a class="btn btn-sm btn-secondary" href="#" role="button">
+                Download
+              </a>
+            </div>
+            <div class="mb-3 bg-secondary-subtle p-3 invcard invisible">
+              <pre>Invoice Info</pre>
+              <a class="btn btn-sm btn-secondary" href="#" role="button">
+                Download
+              </a>
+            </div>
+          </div>
         </div>
       </main>
 
@@ -215,7 +259,102 @@
 
     <script src="./js/bootstrap.bundle.min.js"></script>
     <script>
-      const request_invoice = () => {
+      var INVOICES = [];
+
+      function showErrorBox (msg) {
+          const el = document.getElementById('errbox');
+          el.innerText = msg;
+          el.classList.remove('invisible');
+      }
+
+      function clearErrorBox (msg) {
+          document.getElementById('errbox').classList.add('invisible');
+      }
+
+      function loadItemData (name) {
+          try {
+              const data = window.localStorage.getItem(name);
+              if (data) {
+                  return JSON.parse(data);
+              }
+          }
+          catch (err) {
+              console.log(err);
+          }
+      }
+
+      function storeItemData (name, obj) {
+          try {
+              window.localStorage.setItem(name, JSON.stringify(obj));
+          }
+          catch (err) {
+              console.log(err);
+          }
+      }
+
+      function loadRegInfo() {
+          const reginfo = loadItemData('REGINFO');
+          if (reginfo) {
+              document.querySelector('input[name="regemail"]')
+                  .value = reginfo.regemail;
+              document.querySelector('input[name="regname"]')
+                  .value = reginfo.regname;
+          }
+      }
+
+      function loadInvoiceInfo() {
+          const invoices = loadItemData('INVINFO');
+          if (invoices) {
+              const url = 'https://api.dashingsoft.com/product/pay/invoice/?';
+              const invcards = document.getElementById('section-invoices')
+                    .querySelectorAll('div.invcard');
+              invoices.forEach((item, index) => {
+                  if (index < invcards.length) {
+                      const pre = invcards[index].children[0];
+                      const a = invcards[index].children[1];
+                      pre.innerText = formatInvoice(item);
+                      a.href = `${url}cmd=download&txn_id=${item.txn_id}`;
+                  }
+                  else {
+                      console.log(`ignore too many invoice: ${item}`)
+                  }
+              });
+              INVOICES = invoices;
+          }
+      }
+
+      function formatInvoice(inv) {
+          return [
+              `Pay Date:      ${inv.paydate}`,
+              `Email:         ${inv.payemail}`,
+              `Business Name: ${inv.regname}`,
+              `Quantity:      ${inv.quantity}`,
+              `Amount:        USD ${inv.mc_gross}`,
+          ].join('\n');
+      }
+
+      function storeInvoiceInfo(invinfo) {
+          const invoices = INVOICES;
+          invinfo.forEach((inv) => {
+              if (!invoices.some((item) => inv.pk === item.pk)) {
+                  const obj = {
+                      pk: inv.pk,
+                      txn_id: inv.txn_id,
+                      paydate: inv.paydate,
+                      payemail: inv.payemail,
+                      product_id: inv.product_id,
+                      mc_gross: inv.gross,
+                      regname: regname,
+                      quantity: inv.quantity,
+                      timestamp: Date.now(),
+                  };
+                  invoices.splice(0, 0, obj);
+              }
+          });
+          storeItemData('INVINFO', INVOICES);
+      }
+
+      const requestInvoice = (e) => {
           const url = "https://api.dashingsoft.com/product/pay/invoice/";
           const regemail = document.querySelector('input[name="regemail"]');
           const regname = document.querySelector('input[name="regname"]');
@@ -223,73 +362,124 @@
           const regnote = document.querySelector('input[name="regnote"]');
           const billto = document.querySelector('input[name="billto"]');
           const amount = document.querySelector('input[name="amount"]');
-          const infodiv = document.getElementById('infobox');
-          const submitbtn = document.querySelector('form button[type="submit"]');
 
-          submitbtn.addEventListener('click', (e) => {
+          const req = new Request(url);
+          const headers = new Headers();
+          const method = 'POST';
+          const paras = {
+              regemail: regemail.value,
+              regname: regname.value,
+              regaddr: regaddr.value,
+              regnote: regnote.value,
+              billto: billto.checked ? "1" : "0",
+              amount: amount.value,
+          };
 
-              const req = new Request(url);
-              const headers = new Headers();
-              const method = 'POST';
-              const paras = {
-                  regemail: regemail.value,
-                  regname: regname.value,
-                  regaddr: regaddr.value,
-                  regnote: regnote.value,
-                  billto: billto.checked ? "1" : "0",
-                  amount: amount.value,
-              };
-              const formData = new FormData();
-              formData.append("regemail", paras.regemail);
-              formData.append("regname", paras.regname);
-              formData.append("regaddr", paras.regaddr);
-              formData.append("regnote", paras.regnote);
-              formData.append("billto", paras.billto);
-              formData.append("amount", paras.amount);
+          if (!paras.regemail) {
+              regemail.focus();
+              throw new Error('Shipping Email is required');
+          }
 
-              e.preventDefault();
-              e.stopPropagation();
+          if (!paras.regname) {
+              regname.focus();
+              throw new Error('Business Name is required');
+          }
 
-              fetch(req, {
-                  method: method,
-                  mode: "cors",
-                  headers: headers,
-                  body: formData,
+          if (!paras.regaddr) {
+              regaddr.focus();
+              throw new Error('Address is required');
+          }
+
+          const formData = new FormData();
+          formData.append("regemail", paras.regemail);
+          formData.append("regname", paras.regname);
+          formData.append("regaddr", paras.regaddr);
+          formData.append("regnote", paras.regnote);
+          formData.append("billto", paras.billto);
+          formData.append("amount", paras.amount);
+
+          fetch(req, {
+              method: method,
+              mode: "cors",
+              headers: headers,
+              body: formData,
+          })
+              .then((res) => {
+                  if (res.ok)
+                      return res.json();
+                  if (res.status === 400)
+                      return res.text();
+                  throw new Error(res.statusText);
               })
-                  .then((res) => {
-                      if (res.ok)
-                          return res.json();
-                      if (res.status === 400)
-                          return res.text();
-                      throw new Error(res.statusText);
-                  })
 
-                  .then((invoice) => {
-                      if (typeof invoice === "string")
-                          throw new Error(invoice);
-                      console.log(`Get invoice: ${invoice}`);
-                      infodiv.className = "alert alert-success";
-                      infodiv.innerHTML = "Request invoice sucessfully";
-                  })
+              .then((invinfo) => {
+                  if (typeof invinfo === "string")
+                      throw new Error(invinfo);
+                  document.querySelector('form button')
+                      .setAttribute('disabled', 'true');
+                  document.querySelectorAll('form input').forEach(
+                      (el) => {
+                          el.setAttribute('disabled', 'true');
+                      });
+                  storeInvoiceInfo(info);
+              })
 
-                  .catch((err) => {
-                      console.log(`got error: ${err}`);
-                      infodiv.className = "alert alert-danger";
-                      infodiv.innerHTML = err.toString();
-                  })
-          });
+              .catch((err) => {
+                  showErrorBox(err.toString());
+              })
+      };
+
+      const tryDownloadInvoice = (e) => {
+          const target = e.target;
+          if (target.getAttribute('downloadable') === 'true')
+              return;
+
+          e.preventDefault();
+          e.stopPropagation();
+
+          const url = target.href.replace('cmd=download', 'cmd=query');
+          const req = new Request(url);
+          window.fetch(req)
+              .then((res) => {
+                  if (!res.ok) {
+                      throw new Error(`HTTP error! Status: ${response.status}`);
+                  }
+                  return res.json();
+              })
+              .then((res) => {
+                  if (res.downloadable) {
+                      target.setAttribute('downloadable', 'true');
+                  }
+              })
+              .catch((err) => {
+                  showError(err.toString());
+              });
       };
 
       window.addEventListener('DOMContentLoaded', () => {
-          try {
-              request_invoice()
-          }
-          catch (err) {
-              console.log(err.toString())
-              document.getElementById('infobox').className = "alert alert-danger";
-              document.getElementById('infobox').innerHTML = err.toString();
-              document.querySelector('form button[type="submit"]').setAttribute('disabled', '');
-          }
+
+          document.querySelector('form button').addEventListener(
+              'click', (e) => {
+                  clearErrorBox();
+
+                  e.preventDefault();
+                  e.stopPropagation();
+
+                  try {
+                      requestInvoice();
+                  }
+                  catch (err) {
+                      console.log(err.toString());
+                      showErrorBox(err.toString());
+                  }
+              });
+
+          document.querySelectorAll('.invcard a.btn').forEach(
+              (btn) => btn.addEventListener('click', tryDownloadInvoice)
+          );
+
+          loadInvoiceInfo();
+          loadRegInfo();
       })
     </script>
   </body>
