@@ -259,7 +259,8 @@
 
     <script src="./js/bootstrap.bundle.min.js"></script>
     <script>
-      var INVOICES = [];
+      const INVURL = 'https://api.dashingsoft.com/product/pay/invoice/';
+      // const INVURL = 'http://test-api.dashingsoft.com/product/pay/invoice/';
 
       function showErrorBox (msg) {
           const el = document.getElementById('errbox');
@@ -302,24 +303,26 @@
           }
       }
 
-      function loadInvoiceInfo() {
-          const invoices = loadItemData('INVINFO');
+      function loadInvoiceInfo(invinfo) {
+          const invoices = invinfo ? invinfo : loadItemData('INVINFO');
           if (invoices) {
-              const url = 'https://api.dashingsoft.com/product/pay/invoice/?';
               const invcards = document.getElementById('section-invoices')
                     .querySelectorAll('div.invcard');
+              for (const el of invcards) {
+                  el.classList.add('invisible');
+              }
               invoices.forEach((item, index) => {
                   if (index < invcards.length) {
                       const pre = invcards[index].children[0];
                       const a = invcards[index].children[1];
                       pre.innerText = formatInvoice(item);
-                      a.href = `${url}cmd=download&txn_id=${item.txn_id}`;
+                      a.href = `${INVURL}?cmd=download&txn_id=${item.txn_id}`;
+                      invcards[index].classList.remove('invisible');
                   }
                   else {
                       console.log(`ignore too many invoice: ${item}`)
                   }
               });
-              INVOICES = invoices;
           }
       }
 
@@ -334,28 +337,31 @@
       }
 
       function storeInvoiceInfo(invinfo) {
-          const invoices = INVOICES;
+          const invoices = loadItemData('INVINFO');
           invinfo.forEach((inv) => {
-              if (!invoices.some((item) => inv.pk === item.pk)) {
-                  const obj = {
+              const n = invoices.findIndex((item) => inv.pk === item.pk);
+              if (n !== -1) {
+                  console.log(`Remove old invoice: ${invoices[n]}`);
+                  invoices.splice(n, 1);
+              }
+              const obj = {
                       pk: inv.pk,
                       txn_id: inv.txn_id,
                       paydate: inv.paydate,
                       payemail: inv.payemail,
                       product_id: inv.product_id,
-                      mc_gross: inv.gross,
-                      regname: regname,
+                      mc_gross: inv.mc_gross,
+                      regname: inv.regname,
                       quantity: inv.quantity,
                       timestamp: Date.now(),
-                  };
-                  invoices.splice(0, 0, obj);
-              }
+              };
+              invoices.splice(0, 0, obj);
           });
-          storeItemData('INVINFO', INVOICES);
+          storeItemData('INVINFO', invoices);
+          loadInvoiceInfo(invoices);
       }
 
       const requestInvoice = (e) => {
-          const url = "https://api.dashingsoft.com/product/pay/invoice/";
           const regemail = document.querySelector('input[name="regemail"]');
           const regname = document.querySelector('input[name="regname"]');
           const regaddr = document.querySelector('input[name="regaddr"]');
@@ -363,7 +369,7 @@
           const billto = document.querySelector('input[name="billto"]');
           const amount = document.querySelector('input[name="amount"]');
 
-          const req = new Request(url);
+          const req = new Request(INVURL);
           const headers = new Headers();
           const method = 'POST';
           const paras = {
@@ -421,7 +427,7 @@
                       (el) => {
                           el.setAttribute('disabled', 'true');
                       });
-                  storeInvoiceInfo(info);
+                  storeInvoiceInfo(invinfo);
               })
 
               .catch((err) => {
@@ -447,12 +453,25 @@
                   return res.json();
               })
               .then((res) => {
-                  if (res.downloadable) {
+                  const state = res.state;
+                  if (state === 2) {
                       target.setAttribute('downloadable', 'true');
+                  }
+                  else if (state === 0) {
+                      throw new Error(`You still haven't request PDF invoice`);
+                  }
+                  else if (state === 1) {
+                      throw new Error(
+                          `Pyarmor Team is processing this PDF invoice, ` +
+                          `please try it later, generally it need 24 hours`
+                      );
+                  }
+                  else {
+                      throw new Error(`This PDF invoice is still not avaliable (${state})`);
                   }
               })
               .catch((err) => {
-                  showError(err.toString());
+                  showErrorBox(err.toString());
               });
       };
 
@@ -478,8 +497,8 @@
               (btn) => btn.addEventListener('click', tryDownloadInvoice)
           );
 
-          loadInvoiceInfo();
           loadRegInfo();
+          loadInvoiceInfo();
       })
     </script>
   </body>

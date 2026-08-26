@@ -65,7 +65,6 @@ function setOrderState(ordinfo) {
     const invbtn = document.getElementById('invoice-button');
     const invitems = document.getElementById('invoice-states');
     const orditems = document.getElementById('order-states');
-    const grpnote = document.getElementById('group-license-hint');
 
     const invstate = ordinfo && ordinfo.pk && invoices && invoices.find(
         (inv) => inv.id === ordinfo.pk) ? 1 : 0;
@@ -75,24 +74,28 @@ function setOrderState(ordinfo) {
         ordinfo && ordinfo.pk ? 1 : 0;
     order_state = ordstate;
 
-    orditems.children.forEach((el) => el.classList.add('d-none'));
-    invitems.children.forEach((el) => el.classList.add('d-none'));
-    grpnote.classList.add('d-none');
+    for (const el of orditems.children) {
+        el.classList.add('d-none');
+    }
+    for (const el of invitems.children) {
+        el.classList.add('d-none');
+    }
 
-    invbtn.href = invstate ? 'checkout.html' ? 'checkout.html#section-invoices';
-    invbtn.innerText = invstate ? 'Download PDF Invoice' ? 'Request PDF Invoice';
+    invbtn.href = `request-invoice.html${invstate ? '#section-invoices' : ''}`;
+    invbtn.innerText = invstate ? 'Download PDF Invoice' : 'Request PDF Invoice';
 
-    orditems.children[ordstate].classList.remove('d-node');
-    invitems.children[invstate].classList.remove('d-node');
+    orditems.children[ordstate].classList.remove('d-none');
+    invitems.children[invstate].classList.remove('d-none');
 
     if (ordstate === 2 &&
         reginfo.lictype && reginfo.lictype.toLowerCase() === 'group')
-        grpnote.classList.remove('d-none');
+        document.getElementById('group-license-hint').classList.remove('d-none');
 }
 
 // Refresh page by checking order state
 function refreshOrderState() {
     const url = 'https://api.dashingsoft.com/product/pay/event/';
+    // const url = 'http://test-api.dashingsoft.com/product/pay/event/';
     const ordinfo = loadItemData('ORDINFO');
 
     const req = new Request(url);
@@ -120,15 +123,14 @@ function refreshOrderState() {
         })
 
         .then((data) => {
-            const pk = data.pk;
-            if (!pk || pk === -1) {
+            if (data.pk && data.pk !== -1) {
+                storeItemData('ORDINFO', data);
+                setOrderState(data);
+            }
+            else {
                 // Not found
                 storeItemData('ORDINFO');
                 setOrderState();
-            }
-            else {
-                storeItemData('ORDINFO', data);
-                setOrderState(data);
             }
         })
 
@@ -143,6 +145,13 @@ window.addEventListener('DOMContentLoaded', () => {
     }
     else {
         reginfo = loadItemData( 'REGINFO' );
+        if (!reginfo) {
+            showError(
+                `It doesn't work to open this page directly\n` +
+                `It only works when you have completed the payment from PayPal`
+            );
+            return;
+        }
 
         document.getElementById('reginfo-box').innerText = [
             `License Type:     ${reginfo.lictype}`,
@@ -151,7 +160,7 @@ window.addEventListener('DOMContentLoaded', () => {
             `Shipping Email:   ${reginfo.regemail}`,
         ].join('\n');
 
-        document.querySelectorAll('b[name="shipping-email"]').forEach(
+        document.querySelectorAll('b[name="regemail"]').forEach(
             (el) => el.innerText = reginfo.regemail
         );
 
