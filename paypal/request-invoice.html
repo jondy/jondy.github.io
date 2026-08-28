@@ -337,7 +337,8 @@
       }
 
       function storeInvoiceInfo(invinfo) {
-          const invoices = loadItemData('INVINFO');
+          const previnvs = loadItemData('INVINFO');
+          const invoices = previnvs instanceof Array ? previnvs : [];
           invinfo.forEach((inv) => {
               const n = invoices.findIndex((item) => inv.pk === item.pk);
               if (n !== -1) {
