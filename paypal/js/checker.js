@@ -115,6 +115,11 @@ function checkRegistrationInfo(reginfo, errcb)
             return false;
         }
 
+        if (product.toLowerCase().search('pyarmor') !== -1) {
+            showError(`Invalid bind product name "${product}"`);
+            return false;
+        }
+
     }
 
     if (typeof email !== 'undefined') {
