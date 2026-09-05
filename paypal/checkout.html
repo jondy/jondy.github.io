@@ -186,10 +186,11 @@
 
       <main>
         <div class="mb-3">
-          <p class="fs-5 text-body-secondary">Please fill <b>Registration Info</b> field with <b>License To</b>, <b>Bind Product</b>, <b>Shipping Email</b></P>
-          <p class="fs-5 text-body-secondary">One item one line.
-            For example
-            <pre>
+          <p class="fs-5 text-body-secondary">Please fill <b>Registration Info</b> in <a class="px-2 link-body-emphasis text-decoration-none" href="index.html">Order Page</a>, then click <b>Checkout</b> button to enter this page</p>
+          <p class="fs-5 text-body-secondary">It doesn't work to fill <b>Registration Info</b> in this page directly</p>
+          <p class="fs-5 text-body-secondary"><b>Registration Info</b> must include <b>License To</b>, <b>Bind Product</b>, <b>Shipping Email</b>. One item one line</p>
+          <p class="fs-5 text-body-secondary">For example:
+            <pre class="p-3">
 Dashingsoft corp.
 Eke Studio
 jondy@dashingsoft.com</pre>
@@ -343,10 +344,10 @@ jondy@dashingsoft.com</pre>
               </script>
             </div>
             <div class="px-3">
-            <p class="fs-5 text-body-secondary"><b>Note:</b></p>
-            <p class="fs-5 text-body-secondary">If <b>Registration Info is WRONG FORMAT, the License Key WON'T BE SENT</b> automatically</p>
-            <p class="fs-5 text-body-secondary">Back to <a class="px-2 link-body-emphasis text-decoration-none" href="index.html">order page</a> to update registration info</p>
-          </div>
+              <p class="fs-5 text-body-secondary"><b>Important:</b></p>
+              <p class="fs-5 text-body-secondary">If <b>Registration Info is WRONG FORMAT, the License Key WON'T BE SENT</b> automatically</p>
+              <p class="fs-5 text-body-secondary">Please back to <a class="px-2 link-body-emphasis text-decoration-none" href="index.html">Order Page</a> to update <b>Registration Info</b></p>
+            </div>
           </div>
         </div>
       </main>
@@ -420,6 +421,9 @@ jondy@dashingsoft.com</pre>
               regname = reginfo.regname;
               regemail = reginfo.regemail;
               regproduct = reginfo.regproduct;
+          }
+          else {
+              document.querySelectorAll('div.tab-pane').forEach( (el) => { el.remove() } );
           }
       })
     </script>
