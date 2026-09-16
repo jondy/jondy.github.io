@@ -4,7 +4,7 @@ const pubemail_patterns = [
     '@gmail.', '@outlook.', '@hotmail.',
     '@icloud.', '@me.', '@mac.',
     '@naver.', '@yahoo.', '@google.',
-    '@mail.ru', '@duck.com',
+    '@mail.ru', '@duck.com', '@drs.com',
     '@proton.me', '@protonmail.com',
 ];
 
@@ -19,7 +19,12 @@ const email_patterns = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 // 5F _
 // 60 `
 // 7B { - 7E ~
-const invalid_name_patterns = /[!-,/:-@[-^`{-~]/;
+const invalid_char_patterns = /[!-,/:-@[-^`{-~]/;
+const invalid_name_patterns = [
+    /pyarmor/,
+    /undefined/,
+    /unknown/,
+];
 
 
 function loadRegInfo(expired) {
@@ -56,6 +61,10 @@ function isPublicEmail(email) {
     return pubemail_patterns.some((x) => email.indexOf(x) > 0);
 }
 
+function isInvalidName(name) {
+    return invalid_name_patterns.some((x) => name.search(x) !== -1);
+}
+
 function checkRegistrationInfo(reginfo, errcb)
 {
     const name = reginfo.regname;
@@ -84,12 +93,17 @@ function checkRegistrationInfo(reginfo, errcb)
             return false;
         }
 
-        const i = name.search(invalid_name_patterns);
+        const i = name.search(invalid_char_patterns);
         if (i !== -1) {
             showError(`License To includes invalid char "${name[i]}"`);
             return false;
         }
 
+        const lowername = name.toLowerCase();
+        if (lowername[0].repeat(lowername.length) === lowername || isInvalidName(lowername)) {
+            showError(`Invalid License To "${name}"`);
+            return false;
+        }
     }
 
     if (typeof product !== 'undefined') {
@@ -109,17 +123,17 @@ function checkRegistrationInfo(reginfo, errcb)
             return false;
         }
 
-        const i = product.search(invalid_name_patterns);
+        const i = product.search(invalid_char_patterns);
         if (i !== -1) {
             showError(`Bind Product includes invalid char "${product[i]}"`);
             return false;
         }
 
-        if (product.toLowerCase().search('pyarmor') !== -1) {
+        const lowername = product.toLowerCase();
+        if (lowername[0].repeat(lowername.length) === lowername || isInvalidName(lowername)) {
             showError(`Invalid bind product name "${product}"`);
             return false;
         }
-
     }
 
     if (typeof email !== 'undefined') {
