@@ -139,11 +139,59 @@ function refreshOrderState() {
         })
 }
 
+function requestResendLicense(e) {
+    const url = 'https://api.dashingsoft.com/product/pay/event/';
+    const ordinfo = loadItemData('ORDINFO');
+    // const url = 'http://dashingsoft.com:9096/product/pay/event/';
+    // const ordinfo = { pk: 20 };
+    // order_state = 1;
+    if (ordinfo && ordinfo.pk && order_state === 1) {
+
+        const req = new Request(url);
+        const headers = new Headers();
+        const method = 'POST';
+
+        const formData = new FormData();
+        formData.append("pk", ordinfo.pk);
+        formData.append("resend", 'yes');
+
+        fetch(req, {
+            method: method,
+            mode: "cors",
+            headers: headers,
+            body: formData,
+        })
+            .then((res) => {
+                if (res.ok)
+                    return res.text();
+                throw new Error(res.statusText);
+            })
+
+            .then((msg) => {
+                document.getElementById('resent-result').innerText = `: ${msg}`;
+                window.alert(msg);
+            })
+
+            .catch((err) => {
+                window.alert(err.toString())
+            })
+    }
+    else {
+        window.alert(`It only works when Order state is Sent`);
+    }
+}
+
 window.addEventListener('DOMContentLoaded', () => {
     if (!localStorageAvailable()) {
         errbox.classList.remove('invisible');
     }
     else {
+        document.getElementById('resend-button').addEventListener(
+            'click', (e) => {
+                clearError();
+                requestResendLicense();
+            });
+
         reginfo = loadItemData( 'REGINFO' );
         if (!reginfo) {
             showError(

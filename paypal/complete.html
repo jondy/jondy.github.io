@@ -251,16 +251,23 @@
           <div class="my-3">
             <h3 id="section-notes" class="my-3">Notes</h3>
             <p class="fs-5 text-body-secondary">Generally the license key will be sent to <b name="regemail">Shipping Email</b> in an hour</p>
-            <p class="fs-5 text-body-secondary">If not received after an hour, please perform this checklist at first:</p>
+            <p class="fs-5 text-body-secondary">If not received after an hour, and order state is <span class="bg-secondary-subtle p-2 mr-3">Sent</span>, generally it's your emailing settings problem.</p>
+            <p class="fs-5 text-body-secondary">Please perform this checklist at first:</p>
             <ul class="fs-5 text-body-secondary">
               <li>Refresh this page, make sure order state is <b>Sent</b></li>
               <li>Check your email <b name="regemail">Shipping Email</b>, make sure it works</li>
               <li>Check email's <b>spam box</b></li>
               <li>Check email client setting, make sure it doesn't block <b>pyarmor@163.com</b></li>
-              <li>Check email server setting, if possible, conduct Email Server administrator</li>
+              <li>Check email server setting, and conduct Email Server Administrator (maybe IT Manager of your company)</li>
+              <li>Search network to find how to fix email is blocked issue</li>
             </ul>
-            <p class="fs-5 text-body-secondary">If all check are OK, please contact <a class="link-body-emphasis text-decoration-none" href="mailto:pyarmor@163.com">pyarmor@163.com</a></p>
-            <p class="fs-5 text-body-secondary">If there is no reply in 24 hours, try to use other public domain email or <a class="link-body-no-emphasis text-decoration-none" href="https://github.com/dashingsoft/pyarmor/issues">submit issue in Pyarmor Project</a></p>
+            <p class="fs-5 text-body-secondary">If you're sure your email account could accept email sent by <b>pyarmor@163.com</b>, and still not received, click
+              <button id="resend-button" class="btn btn-secondary mx-2">
+                Resend License Key
+              </button>
+              <span id="resend-result"></span>
+            </p>
+            <p class="fs-5 text-body-secondary">If there is no any reply in 24 hours, please <a class="link-body-no-emphasis text-decoration-none" href="https://github.com/dashingsoft/pyarmor/issues">submit issue in Pyarmor Project</a></p>
           </div>
         </div>
       </main>
