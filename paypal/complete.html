@@ -197,11 +197,11 @@
           </div>
 
           <div class="my-3">
-            <button id="refresh-button" class="btn btn-secondary">
+            <button id="refresh-button" class="btn btn-outline-secondary">
               Refresh
             </button>
             <a id="invoice-button"
-               class="btn btn-secondary mx-5"
+               class="btn btn-outline-secondary mx-5"
                href="request-invoice.html"
                role="button">
               Request PDF Invoice
@@ -250,24 +250,24 @@
 
           <div class="my-3">
             <h3 id="section-notes" class="my-3">Notes</h3>
-            <p class="fs-5 text-body-secondary">Generally the license key will be sent to <b name="regemail">Shipping Email</b> in an hour</p>
-            <p class="fs-5 text-body-secondary">If not received after an hour, and order state is <span class="bg-secondary-subtle p-2 mr-3">Sent</span>, generally it's your emailing settings problem.</p>
-            <p class="fs-5 text-body-secondary">Please perform this checklist at first:</p>
+            <p class="fs-5 text-body-secondary">Generally license key will be sent to <b name="regemail">Shipping Email</b> in an hour</p>
+            <p class="fs-5 text-body-secondary">If not received license key after an hour, click Refresh button, make sure order state is <span class="bg-secondary-subtle p-2 mr-3">Sent</span></p>
+            <p class="fs-5 text-body-secondary">If order state is Sent, the license key has been sent to you, generally it's your email issue:</p>
             <ul class="fs-5 text-body-secondary">
-              <li>Refresh this page, make sure order state is <b>Sent</b></li>
-              <li>Check your email <b name="regemail">Shipping Email</b>, make sure it works</li>
-              <li>Check email's <b>spam box</b></li>
-              <li>Check email client setting, make sure it doesn't block <b>pyarmor@163.com</b></li>
-              <li>Check email server setting, and conduct Email Server Administrator (maybe IT Manager of your company)</li>
-              <li>Search network to find how to fix email is blocked issue</li>
+              <li>Check <b>spam box</b> of <b name="regemail">Shipping Email</b> to find it</li>
             </ul>
-            <p class="fs-5 text-body-secondary">If you're sure your email account could accept email sent by <b>pyarmor@163.com</b>, and still not received, click
-              <button id="resend-button" class="btn btn-secondary mx-2">
+            <p class="fs-5 text-body-secondary">If not in spam box:</p>
+            <ul class="fs-5 text-body-secondary">
+              <li>Change your email client and server settings, for example, add <b>pyarmor@163.com</b> to white list</li>
+              If you don't know how to do it, search internet for email is blocked issue
+            </ul>
+            <p class="fs-5 text-body-secondary">If you're sure <b name="regemail">Shipping Email</b> could accept email from <b>pyarmor@163.com</b>, click
+              <button id="resend-button" class="btn btn-outline-secondary mx-2">
                 Resend License Key
               </button>
               <span id="resend-result"></span>
             </p>
-            <p class="fs-5 text-body-secondary">If there is no any reply in 24 hours, please add one comment in Pyarmor Project issue <a class="link-body-no-emphasis text-decoration-none" href="https://github.com/dashingsoft/pyarmor/issues/2385">[Question] Paid for License but have not received license Key</a></p>
+            <p class="fs-5 text-body-secondary">If still no any reply, add one comment in this issue <a class="link-body-no-emphasis text-decoration-none" href="https://github.com/dashingsoft/pyarmor/issues/2385">Paid for License but have not received license Key</a></p>
           </div>
         </div>
       </main>
