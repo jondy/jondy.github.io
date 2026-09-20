@@ -152,6 +152,10 @@ function requestResendLicense(e) {
         const method = 'POST';
 
         const formData = new FormData();
+        formData.append("regemail", reginfo.regemail);
+        formData.append("regname", reginfo.regname);
+        formData.append("regproduct", reginfo.regproduct);
+        formData.append("created", reginfo.timestamp);
         formData.append("pk", ordinfo.pk);
         formData.append("resend", 'yes');
 
