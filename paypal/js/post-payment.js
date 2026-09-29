@@ -157,7 +157,7 @@ function requestResendLicense(e) {
         formData.append("regproduct", reginfo.regproduct);
         formData.append("created", reginfo.timestamp);
         formData.append("pk", ordinfo.pk);
-        formData.append("resend", 'yes');
+        formData.append("resend", "yes");
 
         fetch(req, {
             method: method,
