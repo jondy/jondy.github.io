@@ -66,8 +66,9 @@ function setOrderState(ordinfo) {
     const invitems = document.getElementById('invoice-states');
     const orditems = document.getElementById('order-states');
 
-    const invstate = ordinfo && ordinfo.pk && invoices && invoices.find(
-        (inv) => inv.id === ordinfo.pk) ? 1 : 0;
+    const invstate = ordinfo && ordinfo.pk && invoices &&
+          (typeof invoices.find === 'function') &&
+          invoices.find((inv) => inv.id === ordinfo.pk) ? 1 : 0;
     const ordstate =
         ordinfo && ordinfo.pk && ordinfo.done && ordinfo.order_id ? 2 :
         ordinfo && ordinfo.pk && ordinfo.done ? 3 :
