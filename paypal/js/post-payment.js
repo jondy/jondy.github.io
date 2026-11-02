@@ -144,8 +144,8 @@ function requestResendLicense(e) {
     const ordinfo = loadItemData('ORDINFO');
     // const url = 'http://dashingsoft.com:9096/product/pay/event/';
     // const ordinfo = { pk: 20 };
-    // order_state = 1;
-    if (ordinfo && ordinfo.pk && order_state === 1) {
+    // order_state = 2;
+    if (ordinfo && ordinfo.pk && order_state === 2) {
 
         const req = new Request(url);
         const headers = new Headers();
