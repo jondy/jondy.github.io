@@ -172,7 +172,7 @@ function requestResendLicense(e) {
             })
 
             .then((msg) => {
-                document.getElementById('resent-result').innerText = `: ${msg}`;
+                document.getElementById('resend-result').innerText = `: ${msg}`;
                 window.alert(msg);
             })
 
